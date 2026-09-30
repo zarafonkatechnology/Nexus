@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus · About</title>
+<meta name="description" content="Nexus — building fast, secure card technology and instant-withdrawal trading tools.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="images/logo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05070f;--bg-2:#0a0f1f;
+  --card:rgba(255,255,255,0.035);--card-2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.08);--border-2:rgba(255,255,255,0.14);
+  --text:#eef2ff;--muted:#8892b0;
+  --accent:#3b82f6;--accent-2:#06b6d4;--accent-glow:rgba(59,130,246,0.35);
+  --success:#22d3a6;--warn:#f5b843;--error:#f26d6d;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  min-height:100vh;position:relative;
+}
+body::before{
+  content:'';position:fixed;top:-30%;left:-10%;
+  width:70vw;height:70vw;
+  background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+body::after{
+  content:'';position:fixed;bottom:-30%;right:-10%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+.container{max-width:1100px;margin:0 auto;padding:0 1.5rem}
+a{color:inherit;text-decoration:none}
+
+/* Nav */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(5,7,15,0.72);backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 0;gap:1rem;position:relative;
+}
+.brand{display:flex;align-items:center;gap:0.5rem;font-weight:800;font-size:1.35rem;letter-spacing:-0.02em}
+.brand-icon{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  display:block;
+  margin-right:0.55rem;
+  filter:drop-shadow(0 0 12px var(--accent-glow));
+  border-radius:8px;   /* remove if your logo is a circle/transparent PNG */
+}.brand span{color:var(--accent)}
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:0.9rem;font-weight:500;color:var(--muted);transition:color 0.2s;position:relative}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-6px;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:2px;
+}
+.menu{
+  display:none;background:transparent;border:1px solid var(--border-2);
+  color:var(--text);font:inherit;font-size:0.85rem;font-weight:600;
+  padding:0.5rem 1rem;border-radius:100px;cursor:pointer;transition:0.2s;
+}
+
+/* Page head */
+.page-head{padding:4.5rem 0 2rem}
+.pill{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(59,130,246,0.1);
+  border:1px solid rgba(59,130,246,0.25);
+  padding:0.4rem 1rem;border-radius:100px;
+  font-size:0.78rem;font-weight:500;color:#93c5fd;
+  letter-spacing:0.02em;margin-bottom:1.5rem;
+}
+h1{
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:800;
+  letter-spacing:-0.035em;line-height:1.05;margin-bottom:1.2rem;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-head p{color:var(--muted);font-size:1.1rem;max-width:620px;line-height:1.65}
+
+.section{padding:4rem 0}
+.section-alt{background:rgba(255,255,255,0.015);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+h2{
+  font-size:clamp(1.7rem,3vw,2.2rem);font-weight:800;
+  letter-spacing:-0.03em;margin-bottom:1rem;line-height:1.15;
+}
+h2 .muted{color:var(--muted);font-weight:400}
+.section-sub{color:var(--muted);font-size:1.05rem;max-width:600px;margin-bottom:2.5rem}
+
+/* Values grid */
+.values-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+  gap:1.2rem;
+}
+.value-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:1.8rem 1.5rem;transition:0.25s;
+  position:relative;overflow:hidden;
+}
+.value-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,rgba(59,130,246,0.5),transparent);
+  opacity:0;transition:opacity 0.25s;
+}
+.value-card:hover{background:var(--card-2);border-color:var(--border-2);transform:translateY(-3px)}
+.value-card:hover::before{opacity:1}
+.value-icon{font-size:1.8rem;margin-bottom:1rem;display:block}
+.value-card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.5rem}
+.value-card p{color:var(--muted);font-size:0.9rem;line-height:1.65}
+
+/* Stats row */
+.stats{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+  gap:1.2rem;margin-top:2rem;
+}
+.stat{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:1.8rem 1.4rem;text-align:center;
+}
+.stat-num{
+  font-size:2.4rem;font-weight:800;letter-spacing:-0.04em;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;margin-bottom:0.4rem;
+}
+.stat-label{color:var(--muted);font-size:0.85rem;font-weight:500}
+
+/* Story block */
+.story-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:center;
+}
+.story-text p{color:var(--muted);font-size:0.98rem;margin-bottom:1rem;line-height:1.7}
+.story-text strong{color:var(--text)}
+.story-visual{
+  position:relative;aspect-ratio:1/1;max-width:400px;
+  border-radius:24px;overflow:hidden;
+  background:var(--card);border:1px solid var(--border-2);
+  display:flex;align-items:center;justify-content:center;
+}
+.story-visual::before{
+  content:'';position:absolute;inset:-50%;
+  background:conic-gradient(from 0deg,transparent,rgba(59,130,246,0.4),transparent,rgba(6,182,212,0.4),transparent);
+  animation:spin 12s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg)}}
+.story-visual-inner{
+  position:relative;z-index:1;
+  width:85%;height:85%;
+  background:linear-gradient(180deg,#0a0f1f,#05070f);
+  border-radius:20px;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:1rem;padding:2rem;text-align:center;
+}
+.story-visual-inner .brand-icon{font-size:3.5rem;filter:drop-shadow(0 0 30px var(--accent-glow))}
+.story-visual-inner .brand-name{font-size:1.6rem;font-weight:800;letter-spacing:-0.02em}
+.story-visual-inner .brand-tag{color:var(--muted);font-size:0.8rem;letter-spacing:0.15em;text-transform:uppercase}
+
+/* Timeline */
+.timeline{
+  position:relative;padding-left:2rem;margin-top:1rem;
+}
+.timeline::before{
+  content:'';position:absolute;left:8px;top:8px;bottom:8px;
+  width:2px;background:linear-gradient(180deg,var(--accent),var(--accent-2));
+  border-radius:2px;
+}
+.tl-item{position:relative;padding-bottom:2rem}
+.tl-item:last-child{padding-bottom:0}
+.tl-item::before{
+  content:'';position:absolute;left:-2rem;top:6px;
+  width:18px;height:18px;border-radius:50%;
+  background:var(--bg);border:2px solid var(--accent);
+  box-shadow:0 0 0 4px rgba(59,130,246,0.15);
+}
+.tl-year{
+  font-size:0.75rem;font-weight:700;color:var(--accent);
+  letter-spacing:0.15em;text-transform:uppercase;margin-bottom:0.3rem;
+}
+.tl-title{font-size:1.05rem;font-weight:700;margin-bottom:0.4rem}
+.tl-desc{color:var(--muted);font-size:0.9rem;line-height:1.65}
+
+/* CTA */
+.cta-box{
+  background:linear-gradient(135deg,rgba(59,130,246,0.15),rgba(6,182,212,0.1));
+  border:1px solid rgba(59,130,246,0.3);
+  border-radius:24px;padding:3rem 2rem;text-align:center;
+  position:relative;overflow:hidden;
+}
+.cta-box::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(59,130,246,0.15),transparent 60%);
+  pointer-events:none;
+}
+.cta-box h2{margin-bottom:0.8rem}
+.cta-box p{color:var(--muted);margin-bottom:1.8rem;max-width:520px;margin-left:auto;margin-right:auto}
+.cta-actions{display:flex;gap:0.8rem;justify-content:center;flex-wrap:wrap}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
+  font-weight:600;font-size:0.95rem;
+  padding:0.85rem 1.6rem;border-radius:100px;
+  border:none;cursor:pointer;transition:0.2s;
+  font-family:inherit;letter-spacing:-0.01em;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;box-shadow:0 10px 30px var(--accent-glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 40px var(--accent-glow)}
+.btn-ghost{
+  background:var(--card);color:var(--text);
+  border:1px solid var(--border-2);
+}
+.btn-ghost:hover{background:var(--card-2);border-color:var(--accent)}
+
+.footer{border-top:1px solid var(--border);padding:2.5rem 0 2rem;margin-top:3rem;background:rgba(0,0,0,0.2)}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem;font-size:0.85rem;color:var(--muted);align-items:center}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a:hover{color:var(--accent)}
+
+@media (max-width:800px){
+  .story-grid{grid-template-columns:1fr;gap:2rem}
+  .story-visual{max-width:320px;margin:0 auto}
+}
+@media (max-width:700px){
+  .menu{display:inline-block}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:1.5rem;right:1.5rem;
+    flex-direction:column;align-items:stretch;
+    background:rgba(10,15,31,0.98);backdrop-filter:blur(20px);
+    border:1px solid var(--border-2);border-radius:20px;
+    padding:1rem;gap:0.3rem;margin-top:0.6rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:0.85rem 1rem;border-radius:12px;font-size:1rem}
+  .nav-links a.active::after{display:none}
+  .nav-links a.active{background:var(--card)}
+  .page-head{padding:3rem 0 1.5rem}
+  .section{padding:3rem 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html"><img class="brand-icon" src="images/logo.png" alt="Nexus logo"><span class="brand-text">Nexus<span class="brand-dot">.</span></span></a>    <button class="menu" type="button" aria-label="Open menu" aria-expanded="false">Menu</button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html" class="active">About</a>
+      <a href="download.html">Download</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<section class="page-head container">
+  <span class="pill">✨ About Nexus</span>
+  <h1>Built by traders,<br>for <em>traders.</em></h1>
+  <p>Nexus is a card-technology platform focused on one thing: moving money fast and securely across every device you own. No bloat, no legacy banking friction — just clean tools that work.</p>
+</section>
+
+<!-- VALUES -->
+<section class="section">
+  <div class="container">
+    <h2>What we <span class="muted">believe.</span></h2>
+    <p class="section-sub">Four principles guide every product decision we make.</p>
+
+    <div class="values-grid">
+      <div class="value-card">
+        <span class="value-icon">⚡</span>
+        <h3>Speed is a feature</h3>
+        <p>Withdrawals shouldn't take days. We obsess over every millisecond between your tap and your money.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">🔐</span>
+        <h3>Security by default</h3>
+        <p>Biometric unlock, argon2 hashing, 3-D Secure — not as add-ons, but as the baseline.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">🌍</span>
+        <h3>Borderless money</h3>
+        <p>Western Union, Wish Money, Visa — we support the payout rails people actually use.</p>
+      </div>
+      <div class="value-card">
+        <span class="value-icon">👁️</span>
+        <h3>Radical clarity</h3>
+        <p>No hidden fees, no confusing fine print. What you see is what you get.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STATS -->
+<section class="section section-alt">
+  <div class="container">
+    <h2>Nexus in <span class="muted">numbers.</span></h2>
+    <p class="section-sub">Real usage across our platform since launch.</p>
+
+    <div class="stats">
+      <div class="stat">
+        <div class="stat-num">24h</div>
+        <div class="stat-label">Average first withdrawal</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">3</div>
+        <div class="stat-label">Payout methods supported</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">99.9%</div>
+        <div class="stat-label">Platform uptime</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">0</div>
+        <div class="stat-label">Hidden fees</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- STORY -->
+<section class="section">
+  <div class="container story-grid">
+    <div class="story-text">
+      <h2>Our <span class="muted">story.</span></h2>
+      <p><strong>Nexus started</strong> as a personal frustration. Existing trading apps made withdrawing money feel like a punishment — verification mazes, week-long waits, and mysterious fees.</p>
+      <p>We built the tool we wanted to use ourselves: <strong>one app</strong> that lets you trade in seconds and withdraw in minutes, on any platform you happen to be using.</p>
+      <p>Today, Nexus is used by traders and small businesses who need money to move on their schedule, not their bank's.</p>
+    </div>
+
+    <div class="story-visual">
+      <div class="story-visual-inner">
+        <div class="brand-icon">📈</div>
+        <div class="brand-name">Nexus<span style="color:var(--accent)">.</span></div>
+        <div class="brand-tag">Since 2026</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TIMELINE -->
+<section class="section section-alt">
+  <div class="container">
+    <h2>Milestones.</h2>
+    <p class="section-sub">Every version brought us closer to the ideal withdrawal experience.</p>
+
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-year">2026 · Q1</div>
+        <div class="tl-title">First prototype</div>
+        <div class="tl-desc">Nexus v0.1 launched as a personal trading tool — Windows only, local wallet, no cloud sync.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026 · Q2</div>
+        <div class="tl-title">Multi-platform release</div>
+        <div class="tl-desc">Added macOS and Android apps. Introduced biometric unlock and end-to-end encrypted sync across devices.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026 · Q3</div>
+        <div class="tl-title">Instant withdrawals</div>
+        <div class="tl-desc">Integrated Western Union, Wish Money, and Visa payout rails — most withdrawals now complete in under 5 minutes.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-year">2026 · Today</div>
+        <div class="tl-title">Trusted by traders</div>
+        <div class="tl-desc">Continuous improvements to security, speed, and transparency. Same core promise since day one: fast, private, yours.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="section">
+  <div class="container">
+    <div class="cta-box">
+      <h2>Ready to try it?</h2>
+      <p>Download the Nexus app for your platform and experience withdrawals that actually feel instant.</p>
+      <div class="cta-actions">
+        <a href="download.html" class="btn btn-primary">
+          Download Nexus
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </a>
+        <a href="support.html" class="btn btn-ghost">Contact support →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — building better money tools</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="support.html">Support</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var btn = document.querySelector('.nav-inner .menu');
+  var links = document.querySelector('.nav-inner .nav-links');
+  if (!btn || !links) return;
+  btn.addEventListener('click', function (e) {
+    e.preventDefault(); e.stopPropagation();
+    var open = links.classList.toggle('open');
+    btn.setAttribute('aria-expanded', open);
+    btn.textContent = open ? 'Close' : 'Menu';
+  });
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', function () {
+      links.classList.remove('open'); btn.textContent = 'Menu';
+    });
+  });
+  document.addEventListener('click', function (e) {
+    if (links.classList.contains('open') && !links.contains(e.target) && !btn.contains(e.target)) {
+      links.classList.remove('open'); btn.textContent = 'Menu';
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

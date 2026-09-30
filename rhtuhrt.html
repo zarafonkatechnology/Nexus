@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<style>
+  .market-card {
+    width: 280px;
+    background: #0f172a;
+    border-radius: 14px;
+    padding: 16px;
+    font-family: 'Segoe UI', sans-serif;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .market-card:hover {
+    background: #1e293b;
+  }
+
+  .market-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .market-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 14px;
+    background: linear-gradient(135deg, #f59e0b, #f97316);
+  }
+
+  .market-icon.eth {
+    background: linear-gradient(135deg, #6366f1, #8b5cf6);
+  }
+
+  .market-icon.sol {
+    background: linear-gradient(135deg, #06b6d4, #14b8a6);
+  }
+
+  .market-name {
+    font-size: 14px;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .market-pair {
+    font-size: 12px;
+    color: #64748b;
+    margin: 2px 0 0 0;
+  }
+
+  .market-right {
+    text-align: right;
+  }
+
+  .market-price {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+  }
+
+  .market-change {
+    font-size: 12px;
+    font-weight: 600;
+    margin: 4px 0 0 0;
+    padding: 2px 8px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .market-change.up {
+    background: rgba(16, 185, 129, 0.15);
+    color: #10b981;
+  }
+
+  .market-change.down {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+  }
+
+  .market-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+</style>
+</head>
+<body>
+
+<div class="market-list">
+  <div class="market-card">
+    <div class="market-left">
+      <div class="market-icon">₿</div>
+      <div>
+        <p class="market-name">Bitcoin</p>
+        <p class="market-pair">BTC/USD</p>
+      </div>
+    </div>
+    <div class="market-right">
+      <p class="market-price">$43,567.89</p>
+      <span class="market-change up">+2.34%</span>
+    </div>
+  </div>
+
+  <div class="market-card">
+    <div class="market-left">
+      <div class="market-icon eth">Ξ</div>
+      <div>
+        <p class="market-name">Ethereum</p>
+        <p class="market-pair">ETH/USD</p>
+      </div>
+    </div>
+    <div class="market-right">
+      <p class="market-price">$1,800.00</p>
+      <span class="market-change up">+5.12%</span>
+    </div>
+  </div>
+
+  <div class="market-card">
+    <div class="market-left">
+      <div class="market-icon sol">◎</div>
+      <div>
+        <p class="market-name">Solana</p>
+        <p class="market-pair">SOL/USD</p>
+      </div>
+    </div>
+    <div class="market-right">
+      <p class="market-price">$90.00</p>
+      <span class="market-change down">-1.23%</span>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

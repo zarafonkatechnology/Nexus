@@ -1,0 +1,133 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1011" height="638" viewBox="0 0 1011 638">
+  <!-- ===== BACKGROUND ===== -->
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0A0E27"/>
+      <stop offset="100%" stop-color="#1A1F3A"/>
+    </linearGradient>
+    <linearGradient id="nexusGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#00F0FF"/>
+      <stop offset="100%" stop-color="#00FF88"/>
+    </linearGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <filter id="softGlow">
+      <feGaussianBlur stdDeviation="8" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1011" height="638" rx="30" ry="30" fill="url(#bgGrad)"/>
+
+  <!-- Subtle grid pattern -->
+  <g opacity="0.05" stroke="#00F0FF" stroke-width="1">
+    <line x1="0" y1="100" x2="1011" y2="100"/>
+    <line x1="0" y1="200" x2="1011" y2="200"/>
+    <line x1="0" y1="300" x2="1011" y2="300"/>
+    <line x1="0" y1="400" x2="1011" y2="400"/>
+    <line x1="0" y1="500" x2="1011" y2="500"/>
+    <line x1="200" y1="0" x2="200" y2="638"/>
+    <line x1="400" y1="0" x2="400" y2="638"/>
+    <line x1="600" y1="0" x2="600" y2="638"/>
+    <line x1="800" y1="0" x2="800" y2="638"/>
+  </g>
+
+  <!-- ===== ROBOT (Left Side) ===== -->
+  <g transform="translate(60, 180)">
+    <!-- Robot glow -->
+    <ellipse cx="110" cy="120" rx="120" ry="120" fill="#00F0FF" opacity="0.15" filter="url(#softGlow)"/>
+
+    <!-- Robot head -->
+    <rect x="55" y="0" width="110" height="90" rx="20" fill="#1E293B" stroke="#00F0FF" stroke-width="3"/>
+    <!-- Head visor -->
+    <rect x="70" y="20" width="80" height="35" rx="10" fill="#00F0FF" opacity="0.9"/>
+    <!-- Eyes -->
+    <circle cx="95" cy="38" r="7" fill="#0A0E27"/>
+    <circle cx="125" cy="38" r="7" fill="#0A0E27"/>
+    <!-- Antenna -->
+    <line x1="110" y1="0" x2="110" y2="-25" stroke="#00F0FF" stroke-width="3"/>
+    <circle cx="110" cy="-30" r="8" fill="#00FF88" filter="url(#glow)"/>
+
+    <!-- Robot neck -->
+    <rect x="95" y="90" width="30" height="15" fill="#334155"/>
+
+    <!-- Robot body -->
+    <rect x="40" y="105" width="140" height="130" rx="20" fill="#1E293B" stroke="#00F0FF" stroke-width="3"/>
+
+    <!-- Chest panel -->
+    <rect x="65" y="125" width="90" height="60" rx="10" fill="#0A0E27" stroke="#00FF88" stroke-width="2"/>
+    <!-- Chest lights -->
+    <circle cx="85" cy="145" r="6" fill="#00FF88" filter="url(#glow)"/>
+    <circle cx="110" cy="145" r="6" fill="#00F0FF" filter="url(#glow)"/>
+    <circle cx="135" cy="145" r="6" fill="#00FF88" filter="url(#glow)"/>
+    <rect x="75" y="160" width="70" height="4" rx="2" fill="#00F0FF" opacity="0.6"/>
+    <rect x="75" y="170" width="50" height="4" rx="2" fill="#00F0FF" opacity="0.4"/>
+
+    <!-- Left arm -->
+    <rect x="0" y="115" width="35" height="90" rx="15" fill="#334155" stroke="#00F0FF" stroke-width="2"/>
+    <circle cx="17" cy="210" r="15" fill="#1E293B" stroke="#00FF88" stroke-width="2"/>
+
+    <!-- Right arm -->
+    <rect x="185" y="115" width="35" height="90" rx="15" fill="#334155" stroke="#00F0FF" stroke-width="2"/>
+    <circle cx="202" cy="210" r="15" fill="#1E293B" stroke="#00FF88" stroke-width="2"/>
+
+    <!-- Legs -->
+    <rect x="65" y="235" width="35" height="60" rx="10" fill="#334155" stroke="#00F0FF" stroke-width="2"/>
+    <rect x="120" y="235" width="35" height="60" rx="10" fill="#334155" stroke="#00F0FF" stroke-width="2"/>
+
+    <!-- Feet -->
+    <rect x="55" y="290" width="55" height="20" rx="8" fill="#1E293B" stroke="#00FF88" stroke-width="2"/>
+    <rect x="110" y="290" width="55" height="20" rx="8" fill="#1E293B" stroke="#00FF88" stroke-width="2"/>
+  </g>
+
+  <!-- ===== NEXUS (Top Center) ===== -->
+  <text x="605" y="95" text-anchor="middle"
+        font-family="Orbitron, Arial Black, sans-serif"
+        font-size="56" font-weight="900"
+        fill="url(#nexusGrad)" letter-spacing="10"
+        filter="url(#glow)">NEXUS</text>
+
+  <!-- ===== TRADING AI (Under NEXUS) ===== -->
+  <text x="605" y="140" text-anchor="middle"
+        font-family="Rajdhani, Arial, sans-serif"
+        font-size="22" font-weight="500"
+        fill="#8892B0" letter-spacing="8">TRADING AI</text>
+
+  <!-- Divider line -->
+  <line x1="420" y1="170" x2="790" y2="170" stroke="#00F0FF" stroke-width="1" opacity="0.3"/>
+
+  <!-- ===== CARD NUMBER ===== -->
+  <text x="420" y="280"
+        font-family="'Share Tech Mono', 'Courier New', monospace"
+        font-size="26" fill="#FFFFFF" letter-spacing="3">
+    CARD NUMBER: <tspan fill="#00F0FF">1234 5678 9012</tspan>
+  </text>
+
+  <!-- ===== CARD PIN ===== -->
+  <text x="420" y="340"
+        font-family="'Share Tech Mono', 'Courier New', monospace"
+        font-size="26" fill="#FFFFFF" letter-spacing="3">
+    CARD PIN: <tspan fill="#00FF88" letter-spacing="8">••••</tspan>
+  </text>
+
+  <!-- ===== $20 (Bottom Right) ===== -->
+  <text x="950" y="585" text-anchor="end"
+        font-family="Orbitron, Arial Black, sans-serif"
+        font-size="52" font-weight="900"
+        fill="#00FF88" letter-spacing="2"
+        filter="url(#glow)">$20</text>
+
+  <!-- Card border -->
+  <rect width="1011" height="638" rx="30" ry="30"
+        fill="none" stroke="#00F0FF" stroke-width="2" opacity="0.4"/>
+
+</svg>

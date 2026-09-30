@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus · Download</title>
+<meta name="description" content="Download Nexus for Windows, macOS or Android. Direct install, no store required.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="images/logo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05070f;--bg-2:#0a0f1f;
+  --card:rgba(255,255,255,0.035);--card-2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.08);--border-2:rgba(255,255,255,0.14);
+  --text:#eef2ff;--muted:#8892b0;
+  --accent:#3b82f6;--accent-2:#06b6d4;--accent-glow:rgba(59,130,246,0.35);
+  --success:#22d3a6;--warn:#f5b843;--error:#f26d6d;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  min-height:100vh;position:relative;
+}
+body::before{
+  content:'';position:fixed;top:-30%;left:-10%;
+  width:70vw;height:70vw;
+  background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+body::after{
+  content:'';position:fixed;bottom:-30%;right:-10%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+.container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+a{color:inherit;text-decoration:none}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(5,7,15,0.72);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 0;gap:1rem;position:relative;
+}
+
+/* Brand — tight "Nexus." */
+.brand{
+  display:inline-flex;
+  align-items:center;
+  font-weight:800;
+  font-size:1.35rem;
+  letter-spacing:-0.02em;
+  text-decoration:none;
+  white-space:nowrap;
+  color:var(--text);
+  gap:0;
+}
+.brand-icon{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  display:block;
+  margin-right:0.55rem;
+  filter:drop-shadow(0 0 12px var(--accent-glow));
+  border-radius:8px;   /* remove if your logo is a circle/transparent PNG */
+}
+.brand-text{
+  display:inline;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1;
+  color:var(--text);
+}
+.brand-dot{color:var(--accent);margin-left:0}
+
+/* Nav links */
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{font-size:0.9rem;font-weight:500;color:var(--muted);transition:color 0.2s;position:relative}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-6px;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:2px;
+}
+
+/* Menu button */
+.menu{
+  display:none;background:transparent;border:1px solid var(--border-2);
+  color:var(--text);font:inherit;font-size:0.85rem;font-weight:600;
+  padding:0.5rem 1rem;border-radius:100px;cursor:pointer;transition:0.2s;
+}
+
+/* Page head */
+.page-head{padding:4.5rem 0 2rem;text-align:center}
+.pill{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(59,130,246,0.1);
+  border:1px solid rgba(59,130,246,0.25);
+  padding:0.4rem 1rem;border-radius:100px;
+  font-size:0.78rem;font-weight:500;color:#93c5fd;
+  letter-spacing:0.02em;margin-bottom:1.5rem;
+}
+h1{
+  font-size:clamp(2.4rem,5vw,3.6rem);font-weight:800;
+  letter-spacing:-0.035em;line-height:1.05;margin-bottom:1.2rem;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-head p{color:var(--muted);font-size:1.1rem;max-width:620px;line-height:1.65;margin:0 auto}
+
+/* Grid of platform cards */
+.platforms{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:1.5rem;margin-top:1rem;
+}
+.platform-card{
+  background:var(--card);
+  border:1px solid var(--border);
+  border-radius:24px;
+  padding:2.2rem 1.8rem;
+  position:relative;overflow:hidden;
+  display:flex;flex-direction:column;
+  transition:0.3s;
+}
+.platform-card::before{
+  content:'';position:absolute;inset:0;
+  background:radial-gradient(circle at 50% 0%,rgba(59,130,246,0.12),transparent 60%);
+  opacity:0;transition:opacity 0.3s;pointer-events:none;
+}
+.platform-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--border-2);
+  background:var(--card-2);
+}
+.platform-card:hover::before{opacity:1}
+
+.platform-icon{
+  width:64px;height:64px;
+  border-radius:18px;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 12px 32px var(--accent-glow);
+  margin-bottom:1.3rem;position:relative;z-index:1;
+}
+.platform-icon svg{width:36px;height:36px;color:white}
+.platform-name{
+  font-size:1.5rem;font-weight:800;
+  letter-spacing:-0.02em;margin-bottom:0.3rem;
+  position:relative;z-index:1;
+}
+.platform-version{
+  color:var(--muted);font-size:0.82rem;
+  margin-bottom:1.2rem;position:relative;z-index:1;
+  font-weight:500;
+}
+.platform-desc{
+  color:var(--muted);font-size:0.88rem;
+  line-height:1.6;margin-bottom:1.5rem;
+  position:relative;z-index:1;flex:1;
+}
+.platform-features{
+  display:flex;flex-direction:column;gap:0.6rem;
+  margin-bottom:1.8rem;position:relative;z-index:1;
+}
+.pf-item{
+  display:flex;align-items:center;gap:0.6rem;
+  font-size:0.82rem;color:var(--muted);
+}
+.pf-check{
+  width:18px;height:18px;border-radius:50%;
+  background:rgba(34,211,166,0.12);
+  color:var(--success);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.65rem;font-weight:700;flex-shrink:0;
+}
+
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
+  font-weight:600;font-size:0.9rem;
+  padding:0.8rem 1.4rem;border-radius:100px;
+  border:none;cursor:pointer;transition:0.2s;
+  font-family:inherit;letter-spacing:-0.01em;
+  position:relative;z-index:1;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;box-shadow:0 10px 24px var(--accent-glow);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 14px 32px var(--accent-glow)}
+.btn-block{width:100%}
+
+/* Info / requirements */
+.section{padding:4rem 0}
+.section-alt{background:rgba(255,255,255,0.015);border-top:1px solid var(--border);border-bottom:1px solid var(--border)}
+h2{
+  font-size:clamp(1.7rem,3vw,2.2rem);font-weight:800;
+  letter-spacing:-0.03em;margin-bottom:1rem;line-height:1.15;
+}
+h2 .muted{color:var(--muted);font-weight:400}
+.section-sub{color:var(--muted);font-size:1.05rem;max-width:600px;margin-bottom:2.5rem}
+
+/* Info note */
+.info-note{
+  display:flex;gap:0.9rem;align-items:flex-start;
+  padding:1.1rem 1.3rem;border-radius:16px;
+  background:rgba(59,130,246,0.08);
+  border:1px solid rgba(59,130,246,0.2);
+  font-size:0.88rem;color:var(--muted);
+  line-height:1.6;margin-top:2rem;
+}
+.info-note.warning{
+  background:rgba(245,184,67,0.08);
+  border-color:rgba(245,184,67,0.25);
+}
+.info-note strong{color:var(--text)}
+.info-note code{
+  background:rgba(255,255,255,0.06);
+  padding:0.1rem 0.4rem;border-radius:6px;
+  font-size:0.85em;color:var(--text);
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+}
+
+/* Requirements grid */
+.req-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+  gap:1.2rem;
+}
+.req-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:20px;padding:1.6rem 1.4rem;
+}
+.req-title{
+  display:flex;align-items:center;
+  font-size:0.85rem;font-weight:700;color:var(--accent);
+  letter-spacing:0.08em;text-transform:uppercase;
+  margin-bottom:1rem;
+}
+.req-title svg{
+  width:15px;height:15px;
+  margin-right:8px;
+  flex-shrink:0;
+}
+.req-list{display:flex;flex-direction:column;gap:0.7rem}
+.req-item{
+  display:flex;justify-content:space-between;
+  font-size:0.88rem;color:var(--muted);
+  padding-bottom:0.7rem;
+  border-bottom:1px solid var(--border);
+}
+.req-item:last-child{border-bottom:none;padding-bottom:0}
+.req-item strong{color:var(--text);font-weight:600}
+
+/* Install step list */
+.steps{display:flex;flex-direction:column;gap:0.9rem}
+.step{
+  display:flex;gap:0.85rem;align-items:flex-start;
+  font-size:0.88rem;color:var(--muted);line-height:1.6;
+}
+.step-num{
+  width:22px;height:22px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;font-weight:700;font-size:0.7rem;
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;margin-top:0.15rem;
+  box-shadow:0 4px 12px var(--accent-glow);
+}
+.step strong{color:var(--text);font-weight:600}
+.step code{
+  background:rgba(255,255,255,0.06);
+  padding:0.1rem 0.4rem;border-radius:6px;
+  font-size:0.85em;color:var(--text);
+  font-family:'SF Mono',Menlo,Consolas,monospace;
+}
+.step-sub{
+  display:flex;flex-direction:column;gap:0.35rem;
+  margin-top:0.4rem;padding-left:0;
+}
+.step-sub-item{
+  font-size:0.82rem;color:var(--muted);
+  padding-left:0.8rem;position:relative;
+}
+.step-sub-item::before{
+  content:'›';position:absolute;left:0;
+  color:var(--accent);font-weight:700;
+}
+
+/* Security strip */
+.security-strip{
+  display:flex;align-items:center;gap:1.2rem;
+  padding:1.5rem 1.8rem;border-radius:20px;
+  background:rgba(34,211,166,0.06);
+  border:1px solid rgba(34,211,166,0.2);
+  margin-top:2rem;flex-wrap:wrap;
+}
+.security-strip-icon{
+  width:48px;height:48px;border-radius:14px;
+  background:rgba(34,211,166,0.15);
+  display:flex;align-items:center;justify-content:center;
+  color:var(--success);font-size:1.5rem;flex-shrink:0;
+}
+.security-strip-text{flex:1;min-width:200px}
+.security-strip-text strong{display:block;font-size:1rem;margin-bottom:0.2rem;color:var(--text)}
+.security-strip-text span{color:var(--muted);font-size:0.88rem}
+
+.footer{border-top:1px solid var(--border);padding:2.5rem 0 2rem;margin-top:3rem;background:rgba(0,0,0,0.2)}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1.5rem;font-size:0.85rem;color:var(--muted);align-items:center}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a:hover{color:var(--accent)}
+
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(10,15,31,0.95);backdrop-filter:blur(20px);
+  border:1px solid var(--border-2);color:white;
+  padding:0.9rem 1.6rem;border-radius:100px;font-weight:500;font-size:0.9rem;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  opacity:0;transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;z-index:999;max-width:90%;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(34,211,166,0.4)}
+
+@media (max-width:900px){
+  .platforms{grid-template-columns:1fr;gap:1.2rem}
+}
+@media (max-width:700px){
+  .menu{display:inline-block}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:1.5rem;right:1.5rem;
+    flex-direction:column;align-items:stretch;
+    background:rgba(10,15,31,0.98);backdrop-filter:blur(20px);
+    border:1px solid var(--border-2);border-radius:20px;
+    padding:1rem;gap:0.3rem;margin-top:0.6rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:0.85rem 1rem;border-radius:12px;font-size:1rem}
+  .nav-links a:hover{background:var(--card)}
+  .nav-links a.active::after{display:none}
+  .nav-links a.active{background:var(--card)}
+  .page-head{padding:3rem 0 1.5rem}
+  .section{padding:3rem 0}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html"><img class="brand-icon" src="images/logo.png" alt="Nexus logo"><span class="brand-text">Nexus<span class="brand-dot">.</span></span></a>    <button class="menu" type="button" aria-label="Open menu" aria-expanded="false">Menu</button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="download.html" class="active">Download</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<section class="page-head container">
+  <span class="pill">📦 Download Nexus</span>
+  <h1>Get the app for<br><em>your platform.</em></h1>
+  <p>Direct install — no app store required. Choose Windows, macOS, or Android below. All builds are signed and SHA-256 verified.</p>
+</section>
+
+<!-- PLATFORM CARDS -->
+<section class="section" style="padding-top:1rem">
+  <div class="container">
+    <div class="platforms">
+
+      <!-- WINDOWS -->
+      <div class="platform-card">
+        <div class="platform-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M0 3.449L9.75 2.1v9.451H0V3.449zm10.949-1.5L24 0v11.4H10.949V1.949zM0 12.6h9.75v9.451L0 20.702V12.6zm10.949 0H24V24l-12.951-1.8V12.6z"/>
+          </svg>
+        </div>
+        <div class="platform-name">Windows</div>
+        <div class="platform-version">v3.2.1 · 68 MB · Windows 10/11 (64-bit)</div>
+        <p class="platform-desc">Full desktop app with multi-window charts, hotkeys, and native notifications.</p>
+
+        <div class="platform-features">
+          <div class="pf-item"><span class="pf-check">✓</span> Multi-monitor charts</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Global hotkeys for orders</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Taskbar pinning & system tray</div>
+        </div>
+
+        <a href="downloads/Nexus-Setup.exe" download class="btn btn-primary btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Download .exe
+        </a>
+      </div>
+
+      <!-- MACOS -->
+      <div class="platform-card">
+        <div class="platform-icon">
+          <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/>
+          </svg>
+        </div>
+        <div class="platform-name">macOS</div>
+        <div class="platform-version">v3.2.1 · 72 MB · macOS 12+ (Universal)</div>
+        <p class="platform-desc">Native app for Apple Silicon and Intel Macs. Menu bar mode and Touch ID support.</p>
+
+        <div class="platform-features">
+          <div class="pf-item"><span class="pf-check">✓</span> Apple Silicon + Intel</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Touch ID unlock</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Telegram-connected notifications</div>
+        </div>
+
+        <a href="downloads/Nexus.dmg" download class="btn btn-primary btn-block">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Download .dmg
+        </a>
+      </div>
+
+      <!-- ANDROID -->
+      <div class="platform-card">
+        <div class="platform-icon">
+          <svg viewBox="0 0 512 512" fill="currentColor">
+            <path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/>
+          </svg>
+        </div>
+        <div class="platform-name">Android</div>
+        <div class="platform-version">v3.2.1 · 24 MB · Android 8.0+</div>
+        <p class="platform-desc">Mobile-first APK with biometric unlock, push notifications, and instant withdrawals.</p>
+
+        <div class="platform-features">
+          <div class="pf-item"><span class="pf-check">✓</span> Fingerprint / face unlock</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Push notifications</div>
+          <div class="pf-item"><span class="pf-check">✓</span> Instant withdrawals on-the-go</div>
+        </div>
+
+        <a href="https://github.com/zarafonkatechnology/Nexus/releases/download/v1.0.0/Nexus.apk"
+           download="Nexus.apk" class="btn btn-primary btn-block" id="apk-btn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+          Download .apk
+        </a>
+      </div>
+
+    </div>
+
+    <div class="info-note">
+      <span>💡</span>
+      <span>Each download is served from our secure CDN. If your browser warns about an unsigned file, choose <strong>"Keep"</strong> or <strong>"Open anyway"</strong> — the apps are signed, we just aren't listed in every store yet.</span>
+    </div>
+  </div>
+</section>
+
+<!-- INSTALL GUIDES -->
+<section class="section section-alt">
+  <div class="container">
+    <h2>Install <span class="muted">guides.</span></h2>
+    <p class="section-sub">Follow the steps for your platform. Most installs take under 2 minutes.</p>
+
+    <div class="req-grid">
+
+      <!-- WINDOWS INSTALL -->
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0V3.449zm10.949-1.5L24 0v11.4H10.949V1.949zM0 12.6h9.75v9.451L0 20.702V12.6zm10.949 0H24V24l-12.951-1.8V12.6z"/></svg>
+          Windows
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <span>Run the downloaded <code>Nexus-Setup.exe</code></span>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <span>
+              If Windows shows <strong>"Windows protected your PC"</strong>:
+              <div class="step-sub">
+                <div class="step-sub-item">Click <strong>"More info"</strong></div>
+                <div class="step-sub-item">Then click <strong>"Run anyway"</strong></div>
+              </div>
+            </span>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <span>Follow the setup wizard to install</span>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <span>Right-click the taskbar icon → <strong>Pin to taskbar</strong></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- MACOS INSTALL -->
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          macOS
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <span>Open the downloaded <code>Nexus.dmg</code> file</span>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <span>Drag <strong>Nexus</strong> into your <strong>Applications</strong> folder</span>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <span>
+              First launch — macOS may block an unsigned app:
+              <div class="step-sub">
+                <div class="step-sub-item">In <strong>Applications</strong>, Control-click the Nexus icon</div>
+                <div class="step-sub-item">Choose <strong>Open</strong> → confirm <strong>"Open"</strong></div>
+              </div>
+            </span>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <span>
+              <strong>Enable Telegram notifications</strong> — so alerts come to your phone:
+              <div class="step-sub">
+                <div class="step-sub-item">Open Nexus → <strong>Settings → Notifications</strong></div>
+                <div class="step-sub-item">Choose <strong>"Connect with Telegram"</strong></div>
+                <div class="step-sub-item">Scan the QR code with the Telegram app on your phone</div>
+                <div class="step-sub-item">Confirm the link — alerts now push to your phone via Telegram</div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANDROID INSTALL -->
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+          Android
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="step-num">1</span>
+            <span>Open the downloaded <code>Nexus.apk</code> file</span>
+          </div>
+          <div class="step">
+            <span class="step-num">2</span>
+            <span>
+              Allow install from unknown sources:
+              <div class="step-sub">
+                <div class="step-sub-item">Tap <strong>"Settings"</strong> when prompted</div>
+                <div class="step-sub-item">Enable <strong>"Allow from this source"</strong></div>
+              </div>
+            </span>
+          </div>
+          <div class="step">
+            <span class="step-num">3</span>
+            <span>Tap <strong>Install</strong> and open Nexus</span>
+          </div>
+          <div class="step">
+            <span class="step-num">4</span>
+            <span><strong>Allow notifications</strong> — tap <strong>"Allow"</strong> when the app asks</span>
+          </div>
+          <div class="step">
+            <span class="step-num">5</span>
+            <span>
+              <strong>Disable battery saver restrictions:</strong>
+              <div class="step-sub">
+                <div class="step-sub-item">Open <strong>Settings → Apps → Nexus</strong></div>
+                <div class="step-sub-item">Tap <strong>"App info"</strong></div>
+                <div class="step-sub-item">Go to <strong>Battery → Battery saver</strong></div>
+                <div class="step-sub-item">Change to <strong>"No restrictions"</strong></div>
+              </div>
+            </span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="info-note warning">
+      <span>⚠️</span>
+      <span><strong>Why disable battery saver?</strong> Android aggressively kills background apps to save power — which stops Nexus from delivering notifications on time. Setting Nexus to <strong>"No restrictions"</strong> keeps alerts instant and reliable.</span>
+    </div>
+
+  </div>
+</section>
+
+<!-- REQUIREMENTS -->
+<section class="section">
+  <div class="container">
+    <h2>System <span class="muted">requirements.</span></h2>
+    <p class="section-sub">All platforms run on modest hardware — Nexus is built to be lightweight.</p>
+
+    <div class="req-grid">
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M0 3.449L9.75 2.1v9.451H0V3.449zm10.949-1.5L24 0v11.4H10.949V1.949zM0 12.6h9.75v9.451L0 20.702V12.6zm10.949 0H24V24l-12.951-1.8V12.6z"/></svg>
+          Windows
+        </div>
+        <div class="req-list">
+          <div class="req-item"><span>OS</span><strong>Windows 10 / 11 (64-bit)</strong></div>
+          <div class="req-item"><span>RAM</span><strong>4 GB minimum</strong></div>
+          <div class="req-item"><span>Disk</span><strong>250 MB free</strong></div>
+          <div class="req-item"><span>Internet</span><strong>Required for trading</strong></div>
+        </div>
+      </div>
+
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.05 20.28c-.98.95-2.05.8-3.08.35-1.09-.46-2.09-.48-3.24 0-1.44.62-2.2.44-3.06-.35C2.79 15.25 3.51 7.59 9.05 7.31c1.35.07 2.29.74 3.08.8 1.18-.24 2.31-.93 3.57-.84 1.51.12 2.65.72 3.4 1.8-3.12 1.87-2.38 5.98.48 7.13-.57 1.5-1.31 2.99-2.54 4.09zM12.03 7.25c-.15-2.23 1.66-4.07 3.74-4.25.29 2.58-2.34 4.5-3.74 4.25z"/></svg>
+          macOS
+        </div>
+        <div class="req-list">
+          <div class="req-item"><span>OS</span><strong>macOS 12 Monterey or later</strong></div>
+          <div class="req-item"><span>Processor</span><strong>Apple Silicon / Intel</strong></div>
+          <div class="req-item"><span>RAM</span><strong>4 GB minimum</strong></div>
+          <div class="req-item"><span>Disk</span><strong>250 MB free</strong></div>
+        </div>
+      </div>
+
+      <div class="req-card">
+        <div class="req-title">
+          <svg viewBox="0 0 512 512" fill="currentColor"><path d="M325.3 234.3L104.6 13l280.8 161.2-60.1 60.1zM47 0C34 6.8 25.3 19.2 25.3 35.3v441.3c0 16.1 8.7 28.5 21.7 35.3l256.6-256L47 0zm425.2 225.6l-58.9-34.1-65.7 64.5 65.7 64.5 60.1-34.1c18-14.3 18-46.5-1.2-60.8zM104.6 499l280.8-161.2-60.1-60.1L104.6 499z"/></svg>
+          Android
+        </div>
+        <div class="req-list">
+          <div class="req-item"><span>OS</span><strong>Android 8.0 (Oreo) or later</strong></div>
+          <div class="req-item"><span>RAM</span><strong>2 GB minimum</strong></div>
+          <div class="req-item"><span>Storage</span><strong>100 MB free</strong></div>
+          <div class="req-item"><span>Internet</span><strong>Required for trading</strong></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="security-strip">
+      <div class="security-strip-icon">🔒</div>
+      <div class="security-strip-text">
+        <strong>Every build is signed and verified</strong>
+        <span>We publish SHA-256 checksums for every release. Verify before install if you want extra peace of mind.</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — fast, secure, yours</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="support.html">Support</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast">✨ Download ready</div>
+
+<script>
+(function () {
+  var btn = document.querySelector('.nav-inner .menu');
+  var links = document.querySelector('.nav-inner .nav-links');
+  if (btn && links) {
+    btn.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var open = links.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open);
+      btn.textContent = open ? 'Close' : 'Menu';
+    });
+    links.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        links.classList.remove('open'); btn.textContent = 'Menu';
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (links.classList.contains('open') && !links.contains(e.target) && !btn.contains(e.target)) {
+        links.classList.remove('open'); btn.textContent = 'Menu';
+      }
+    });
+  }
+
+  var toast = document.getElementById('toast');
+  function showToast(msg) {
+    toast.textContent = msg;
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ toast.classList.remove('show'); }, 3000);
+  }
+
+  var apkBtn = document.getElementById('apk-btn');
+  if (apkBtn) apkBtn.addEventListener('click', function () { showToast('📲 Downloading Nexus APK…'); });
+
+  document.querySelectorAll('.platform-card a[download]').forEach(function (a) {
+    a.addEventListener('click', function () {
+      var name = a.querySelector('svg') ? a.textContent.trim() : 'Nexus';
+      showToast('⬇ ' + name + ' starting…');
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

